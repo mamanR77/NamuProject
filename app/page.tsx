@@ -75,10 +75,8 @@ export default function Home() {
 
       {/* Branding aplikasi (kecil) + link staff */}
       <div className="space-y-1 pt-6 text-center">
-        <p className="text-xs text-slate-400">
-          <span className="font-semibold text-slate-500">{APP_NAME}</span> ·
-          Visitor Management System
-        </p>
+        <p className="text-sm font-bold text-slate-600">{APP_NAME}</p>
+        <p className="text-xs text-slate-400">Visitor Management System</p>
         <Link
           href="/staff/login"
           className="inline-block text-xs text-slate-300 transition hover:text-slate-500"
