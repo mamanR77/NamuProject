@@ -79,7 +79,7 @@ export async function createUserAction(
   await requireAdmin();
 
   const name = String(formData.get("name") ?? "").trim();
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const username = String(formData.get("username") ?? "").trim().toLowerCase();
   const password = String(formData.get("password") ?? "");
   const role = String(formData.get("role") ?? "") as Role;
   const waNumber = String(formData.get("waNumber") ?? "").trim();
@@ -87,19 +87,21 @@ export async function createUserAction(
 
   const fieldErrors: Record<string, string> = {};
   if (!name) fieldErrors.name = "Nama wajib diisi";
-  if (!email) fieldErrors.email = "Email wajib diisi";
+  if (!username) fieldErrors.username = "Username wajib diisi";
+  else if (!/^[a-z0-9._-]+$/.test(username))
+    fieldErrors.username = "Username hanya huruf kecil, angka, . _ -";
   if (!password || password.length < 6)
     fieldErrors.password = "Password minimal 6 karakter";
   if (!VALID_ROLES.includes(role)) fieldErrors.role = "Role tidak valid";
   if (Object.keys(fieldErrors).length > 0) return { fieldErrors };
 
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) return { error: "Email sudah terdaftar." };
+  const existing = await prisma.user.findUnique({ where: { username } });
+  if (existing) return { error: "Username sudah terdaftar." };
 
   await prisma.user.create({
     data: {
       name,
-      email,
+      username,
       passwordHash: await hashPassword(password),
       role,
       waNumber: waNumber || null,

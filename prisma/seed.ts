@@ -28,11 +28,11 @@ async function main() {
 
   // Admin
   await prisma.user.upsert({
-    where: { email: "admin@glico.local" },
+    where: { username: "admin" },
     update: {},
     create: {
       name: "Administrator",
-      email: "admin@glico.local",
+      username: "admin",
       passwordHash,
       role: "ADMIN",
       departmentId: departments["IT"],
@@ -41,11 +41,11 @@ async function main() {
 
   // Security / Resepsionis
   await prisma.user.upsert({
-    where: { email: "security@glico.local" },
+    where: { username: "security" },
     update: {},
     create: {
       name: "Petugas Security",
-      email: "security@glico.local",
+      username: "security",
       passwordHash,
       role: "SECURITY",
       departmentId: departments["HRD & GA"],
@@ -54,11 +54,11 @@ async function main() {
 
   // Host (karyawan yang dikunjungi)
   const host = await prisma.user.upsert({
-    where: { email: "andi@glico.local" },
+    where: { username: "andi" },
     update: {},
     create: {
       name: "Andi Wijaya",
-      email: "andi@glico.local",
+      username: "andi",
       passwordHash,
       role: "HOST",
       waNumber: "6281200000001",
@@ -85,9 +85,9 @@ async function main() {
 
   console.log("✅ Seed selesai.");
   console.log("   Login contoh (password semua: password123):");
-  console.log("   - admin@glico.local (ADMIN)");
-  console.log("   - security@glico.local (SECURITY)");
-  console.log("   - andi@glico.local (HOST)");
+  console.log("   - admin (ADMIN)");
+  console.log("   - security (SECURITY)");
+  console.log("   - andi (HOST)");
 }
 
 main()

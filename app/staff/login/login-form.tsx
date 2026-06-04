@@ -21,13 +21,15 @@ export function LoginForm() {
       )}
 
       <div>
-        <label className="text-sm font-medium text-slate-700">Email</label>
+        <label className="text-sm font-medium text-slate-700">Username</label>
         <input
-          name="email"
-          type="email"
+          name="username"
+          type="text"
           autoComplete="username"
+          autoCapitalize="none"
+          spellCheck={false}
           className={inputClass}
-          placeholder="admin@glico.local"
+          placeholder="admin"
         />
       </div>
 

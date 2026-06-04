@@ -9,7 +9,7 @@ CREATE TABLE "Department" (
 CREATE TABLE "User" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
     "passwordHash" TEXT NOT NULL,
     "role" TEXT NOT NULL DEFAULT 'HOST',
     "waNumber" TEXT,
@@ -67,7 +67,7 @@ CREATE TABLE "Notification" (
 CREATE UNIQUE INDEX "Department_name_key" ON "Department"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Visit_qrToken_key" ON "Visit"("qrToken");

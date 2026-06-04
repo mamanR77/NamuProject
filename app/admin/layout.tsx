@@ -47,7 +47,7 @@ export default async function AdminLayout({
               <div className="text-sm font-medium text-slate-900">
                 {user.name}
               </div>
-              <div className="text-xs text-slate-400">{user.email}</div>
+              <div className="text-xs text-slate-400">@{user.username}</div>
             </div>
             <form action={logoutAction}>
               <button

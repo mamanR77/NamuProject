@@ -10,18 +10,18 @@ export async function loginAction(
   _prev: LoginState,
   formData: FormData
 ): Promise<LoginState> {
-  const email = ((formData.get("email") as string | null) ?? "")
+  const username = ((formData.get("username") as string | null) ?? "")
     .trim()
     .toLowerCase();
   const password = (formData.get("password") as string | null) ?? "";
 
-  if (!email || !password) {
-    return { error: "Email dan password wajib diisi." };
+  if (!username || !password) {
+    return { error: "Username dan password wajib diisi." };
   }
 
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.user.findUnique({ where: { username } });
   if (!user || !(await verifyPassword(password, user.passwordHash))) {
-    return { error: "Email atau password salah." };
+    return { error: "Username atau password salah." };
   }
 
   await createSession(user.id);

@@ -48,15 +48,19 @@ export function CreateUserForm({ departments }: { departments: DeptOption[] }) {
       </div>
 
       <div>
-        <label className="text-sm font-medium text-slate-700">Email</label>
+        <label className="text-sm font-medium text-slate-700">Username</label>
         <input
-          name="email"
-          type="email"
+          name="username"
+          type="text"
+          autoCapitalize="none"
+          spellCheck={false}
           className={inputClass}
-          placeholder="nama@glico.local"
+          placeholder="mis. budi.santoso"
         />
-        {state.fieldErrors?.email && (
-          <p className="mt-1 text-xs text-rose-600">{state.fieldErrors.email}</p>
+        {state.fieldErrors?.username && (
+          <p className="mt-1 text-xs text-rose-600">
+            {state.fieldErrors.username}
+          </p>
         )}
       </div>
 

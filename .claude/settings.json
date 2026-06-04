@@ -23,7 +23,11 @@
       "Bash(node --import tsx -e ' *)",
       "Bash(git commit -q -m 'Dashboard Super Admin + Auth staff *)",
       "Bash(git rm *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "PowerShell(try { \\(Get-NetTCPConnection -LocalPort 3001 -State Listen -ErrorAction Stop\\).OwningProcess | Select-Object -Unique | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue; Write-Host \"Stopped PID $_\" } } catch { Write-Host \"no listener 3001\" }; Start-Sleep -Milliseconds 500; Remove-Item \"D:\\\\Namu\\\\dev.db\",\"D:\\\\Namu\\\\dev.db-journal\" -Force -ErrorAction SilentlyContinue; Remove-Item \"D:\\\\Namu\\\\prisma\\\\migrations\\\\20260604142840_init\" -Recurse -Force -ErrorAction SilentlyContinue; Write-Host \"removed old db + migration\")",
+      "Bash(grep -oE \"@[a-z]+|Administrator|Petugas Security|Andi Wijaya|Super Admin|Security|Host\" /tmp/a.html | sort | uniq -c | head)",
+      "Read(//tmp/**)",
+      "Bash(grep -oE \".{0,40}Administrator.{0,80}\" /tmp/a.html)"
     ]
   }
 }

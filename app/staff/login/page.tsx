@@ -37,7 +37,7 @@ export default async function LoginPage({
         </div>
 
         <p className="mt-4 text-center text-xs text-slate-400">
-          Akun demo: admin@glico.local / password123
+          Akun demo: admin / password123
         </p>
         <Link
           href="/"

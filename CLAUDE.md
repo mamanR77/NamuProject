@@ -139,7 +139,8 @@ namu/
 ```
 
 ### Data Model (draft awal)
-- **User** (staff): id, name, email, passwordHash, role, **waNumber** (untuk notif WA), departmentId
+- **User** (staff): id, name, **username** unique (login pakai username, bukan email),
+  passwordHash, role, **waNumber** (untuk notif WA), departmentId
 - **Department**: id, name
 - **Visitor**: id, fullName, company, phone, idNumber, photoUrl
 - **Visit**: id, visitorId, hostId, purpose, status, qrToken, checkInAt, checkOutAt, approvedAt, createdAt
@@ -179,7 +180,7 @@ npm run db:studio           # GUI lihat data (Prisma Studio)
 ```
 
 **Akun contoh** (password semua: `password123`):
-`admin@glico.local` (ADMIN) · `security@glico.local` (SECURITY) · `andi@glico.local` (HOST)
+Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login pakai username**.
 
 ### Catatan teknis penting
 - **Prisma 7.8** — perbedaan dari Prisma 6: (a) `url` TIDAK lagi di `schema.prisma`,
@@ -238,7 +239,7 @@ npm run db:studio           # GUI lihat data (Prisma Studio)
   - **Auth staff** (`lib/auth.ts`): session cookie httpOnly + JWT via `jose` (paket baru
     ditambahkan), `bcryptjs` verify password, `getCurrentUser`, `requireAdmin`/`requireRole`.
     `SESSION_SECRET` di `.env` (+ `.env.example`). Role **ADMIN = Super Admin**.
-  - **Login** `/staff/login` (+ `/staff` redirect cerdas). Akun: admin@glico.local/password123.
+  - **Login** `/staff/login` (+ `/staff` redirect cerdas). Akun: `admin` / `password123`.
   - **Area `/admin`** (guard ADMIN, layout sidebar + logout):
     - Dashboard: 4 kartu statistik (tamu hari ini, menunggu approval, sedang di dalam,
       total tamu) + daftar aktivitas terbaru.
@@ -251,6 +252,13 @@ npm run db:studio           # GUI lihat data (Prisma Studio)
     ke login, dengan session admin valid keempat halaman admin→200 (query DB jalan).
   - ⚙️ Catatan dev: minting cookie uji pakai `node --import tsx` (bukan `npx tsx -e`),
     dan hati-hati `process.exit()` memotong flush stdout pada pipe.
+- **Perubahan: login pakai USERNAME, bukan email** (permintaan user):
+  - `User.email` → `User.username` (unique). Login `/staff/login` & buat user di admin
+    sekarang pakai username (validasi: huruf kecil/angka/`. _ -`).
+  - Seed diperbarui: username `admin` / `security` / `andi` (password tetap `password123`).
+  - **Migrasi di-regenerate** (DB dev di-wipe & reseed; tidak ada data produksi). Migrasi
+    lama dihapus, migrasi baru `20260604151329_init` dengan kolom `username`.
+  - Build/typecheck lolos; smoke test: login page tampil "Username", sesi admin render @username.
 - Status: **belum push** (menunggu konfirmasi user).
 - **Berikutnya**: notifikasi WhatsApp (adapter) saat tamu daftar/approve; area host/security;
   lalu M4 (scan QR check-in/out) & M5 (dashboard monitoring real-time).

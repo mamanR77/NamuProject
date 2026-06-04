@@ -65,7 +65,7 @@ export default async function UsersPage() {
                       </span>
                     </div>
                     <div className="truncate text-xs text-slate-500">
-                      {u.email}
+                      @{u.username}
                       {u.department ? ` · ${u.department.name}` : ""}
                       {u.waNumber ? ` · WA ${u.waNumber}` : ""}
                     </div>
