@@ -6,10 +6,10 @@ export default function Home() {
     <main className="flex-1 flex flex-col px-6 py-10">
       <div className="flex flex-1 flex-col items-center justify-center">
         <div className="w-full max-w-md text-center">
-          {/* Logo Glico (ganti public/glico-logo.svg dengan logo resmi) */}
+          {/* Logo resmi Glico */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/glico-logo.svg"
+            src="/Glico.png"
             alt="Glico"
             className="mx-auto h-20 w-auto"
           />
