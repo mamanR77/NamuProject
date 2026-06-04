@@ -195,7 +195,8 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 ## 8. Aturan Kerja Project
 
 1. **Semua perubahan, keputusan, inisiatif dicatat di CLAUDE.md** (Changelog di bawah).
-2. **TIDAK push apa pun ke GitHub sebelum user konfirmasi.** (Saat ini belum ada git repo.)
+2. **TIDAK push apa pun ke GitHub sebelum user konfirmasi/perintah.**
+   Repo: https://github.com/mamanR77/NamuProject (branch `main`).
 3. Bahasa komunikasi & dokumentasi: Indonesia.
 
 ---
