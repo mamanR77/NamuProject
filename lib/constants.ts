@@ -9,6 +9,29 @@ export const ROLES = {
 } as const;
 export type Role = (typeof ROLES)[keyof typeof ROLES];
 
+export const VISIT_TYPE = {
+  GENERAL: "GENERAL", // tamu umum: meeting, audit, kunjungan
+  LOADING: "LOADING", // sopir/barang menuju loading area
+} as const;
+export type VisitType = (typeof VISIT_TYPE)[keyof typeof VISIT_TYPE];
+
+export const VISIT_TYPE_LABEL: Record<string, string> = {
+  GENERAL: "Tamu",
+  LOADING: "Loading/Unloading",
+};
+
+/// Sub-aktivitas khusus untuk visitType = LOADING.
+export const LOADING_TYPE = {
+  LOADING: "LOADING", // ambil/muat barang
+  UNLOADING: "UNLOADING", // bongkar barang
+} as const;
+export type LoadingType = (typeof LOADING_TYPE)[keyof typeof LOADING_TYPE];
+
+export const LOADING_TYPE_LABEL: Record<string, string> = {
+  LOADING: "Loading (muat)",
+  UNLOADING: "Unloading (bongkar)",
+};
+
 export const VISIT_STATUS = {
   PENDING: "PENDING", // tamu sudah daftar, menunggu approval host
   APPROVED: "APPROVED", // disetujui host, belum masuk

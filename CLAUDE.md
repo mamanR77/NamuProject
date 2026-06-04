@@ -143,7 +143,11 @@ namu/
   passwordHash, role, **waNumber** (untuk notif WA), departmentId
 - **Department**: id, name
 - **Visitor**: id, fullName, company, phone, idNumber, photoUrl
-- **Visit**: id, visitorId, hostId, purpose, status, qrToken, checkInAt, checkOutAt, approvedAt, createdAt
+- **Visit**: id, visitorId, **hostId (opsional)**, **visitType** (GENERAL|LOADING),
+  **loadingType** (LOADING|UNLOADING, utk loading), **vehiclePlate**, **docNumber**,
+  purpose, status, qrToken, checkInAt, checkOutAt, approvedAt, createdAt
+  - **2 jenis kunjungan**: `GENERAL` (tamu umum: meeting/audit/kunjungan — pilih host) &
+    `LOADING` (sopir muat/bongkar barang — tanpa host, pilih aktivitas Loading/Unloading)
 - **Notification**: id, userId, visitId, channel (`IN_APP`|`WA`), type, message, status, readAt, createdAt
 
 ---
@@ -202,6 +206,26 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 ---
 
 ## 9. Changelog
+
+### 2026-06-04 (lanjutan) — 2 Jenis Kunjungan: Tamu & Loading/Unloading
+- **Permintaan user**: ada 2 jenis tamu — (1) **Tamu umum** (meeting/audit/kunjungan) &
+  (2) **Loading/Unloading** (sopir/barang ke loading area). Halaman utama jadi 2 pilihan.
+- **Schema**: `Visit` + `visitType`, `loadingType`, `vehiclePlate`, `docNumber`; `hostId`/`host`
+  dibuat **opsional** (loading tak perlu host). Migrasi `add_visit_type_loading` (aditif,
+  tanpa wipe data). Konstanta `VISIT_TYPE` & `LOADING_TYPE` di `lib/constants.ts`.
+- **Halaman utama** (`app/page.tsx`): 2 kartu pilihan — **Tamu** → `/register`,
+  **Loading/Unloading** → `/loading`.
+- **Route baru `/loading`**: form (aktivitas Loading/Unloading via radio, nama sopir,
+  ekspedisi, No. HP, No. polisi, No. PO/DO/Surat Jalan) + server action `registerLoadingAction`
+  (buat Visit type LOADING tanpa host, status PENDING).
+- **`/visit/[token]`**: handle loading (host null aman) — tampil aktivitas, ekspedisi,
+  no. polisi, no. dokumen.
+- **Dashboard admin** (overview + kunjungan): tambah `TypeBadge` (Tamu / Loading / Unloading),
+  guard host null, tampil info kendaraan utk loading.
+- **Verifikasi**: build/typecheck lolos; smoke test — `/` 2 pilihan, `/loading` form lengkap,
+  visit loading render di status page & dashboard (HTTP 200). Contoh record loading "Joko Sopir"
+  dibiarkan di DB dev sbg demo.
+- Commit lokal (belum push).
 
 ### 2026-06-04 (lanjutan) — Halaman utama khusus Tamu
 - **Permintaan user**: halaman utama (`/`) langsung fokus **Tamu** saja; modul Staff/Security

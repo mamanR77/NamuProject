@@ -1,7 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { VISIT_STATUS } from "@/lib/constants";
+import {
+  VISIT_STATUS,
+  VISIT_TYPE,
+  VISIT_TYPE_LABEL,
+  LOADING_TYPE_LABEL,
+} from "@/lib/constants";
 import { generateQrDataUrl } from "@/lib/qr";
 import { AutoRefresh } from "./auto-refresh";
 
@@ -108,17 +113,45 @@ export default async function VisitStatusPage({
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-sm font-semibold text-slate-900">Detail</h2>
           <dl className="mt-3 space-y-2 text-sm">
-            <Row label="Nama" value={visit.visitor.fullName} />
-            {visit.visitor.company && (
-              <Row label="Perusahaan" value={visit.visitor.company} />
+            <Row label="Jenis" value={VISIT_TYPE_LABEL[visit.visitType] ?? "-"} />
+            {visit.visitType === VISIT_TYPE.LOADING ? (
+              <>
+                <Row label="Sopir" value={visit.visitor.fullName} />
+                {visit.visitor.company && (
+                  <Row label="Ekspedisi" value={visit.visitor.company} />
+                )}
+                {visit.loadingType && (
+                  <Row
+                    label="Aktivitas"
+                    value={LOADING_TYPE_LABEL[visit.loadingType] ?? visit.loadingType}
+                  />
+                )}
+                {visit.vehiclePlate && (
+                  <Row label="No. Polisi" value={visit.vehiclePlate} />
+                )}
+                {visit.docNumber && (
+                  <Row label="No. Dokumen" value={visit.docNumber} />
+                )}
+              </>
+            ) : (
+              <>
+                <Row label="Nama" value={visit.visitor.fullName} />
+                {visit.visitor.company && (
+                  <Row label="Perusahaan" value={visit.visitor.company} />
+                )}
+                {visit.host && (
+                  <Row
+                    label="Menemui"
+                    value={`${visit.host.name}${
+                      visit.host.department
+                        ? ` (${visit.host.department.name})`
+                        : ""
+                    }`}
+                  />
+                )}
+                <Row label="Keperluan" value={visit.purpose} />
+              </>
             )}
-            <Row
-              label="Menemui"
-              value={`${visit.host.name}${
-                visit.host.department ? ` (${visit.host.department.name})` : ""
-              }`}
-            />
-            <Row label="Keperluan" value={visit.purpose} />
           </dl>
         </div>
 

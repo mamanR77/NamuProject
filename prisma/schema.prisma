@@ -54,8 +54,12 @@ model Visit {
   id            String         @id @default(cuid())
   visitorId     String
   visitor       Visitor        @relation(fields: [visitorId], references: [id])
-  hostId        String
-  host          User           @relation("VisitHost", fields: [hostId], references: [id])
+  hostId        String? // opsional: kosong untuk Loading/Unloading
+  host          User?          @relation("VisitHost", fields: [hostId], references: [id])
+  visitType     String         @default("GENERAL") // GENERAL | LOADING
+  loadingType   String? // LOADING | UNLOADING (hanya untuk visitType = LOADING)
+  vehiclePlate  String? // nomor polisi kendaraan (loading)
+  docNumber     String? // No. PO / DO / Surat Jalan (loading)
   purpose       String
   status        String         @default("PENDING")
   qrToken       String         @unique @default(cuid()) // token untuk badge & scan check-in/out
@@ -69,6 +73,7 @@ model Visit {
 
   @@index([status])
   @@index([hostId])
+  @@index([visitType])
 }
 
 /// Notifikasi ke user (host/security). channel: IN_APP | WA.

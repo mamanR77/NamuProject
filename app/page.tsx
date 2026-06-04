@@ -4,7 +4,6 @@ import { APP_NAME } from "@/lib/constants";
 export default function Home() {
   return (
     <main className="flex-1 flex flex-col px-6 py-10">
-      {/* Konten utama: sambutan untuk TAMU */}
       <div className="flex flex-1 flex-col items-center justify-center">
         <div className="w-full max-w-md text-center">
           <div className="inline-flex items-center gap-2 rounded-full bg-rose-50 px-4 py-1.5 text-sm font-medium text-rose-700 ring-1 ring-rose-200">
@@ -19,21 +18,49 @@ export default function Home() {
             Visitor Management System
           </p>
 
-          <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
-            <div className="text-4xl">👋</div>
-            <h2 className="mt-3 text-xl font-semibold text-slate-900">
-              Selamat Datang
-            </h2>
-            <p className="mt-1 text-sm text-slate-600">
-              Silakan daftarkan kunjungan Anda. Pendaftaran cukup dilakukan dari
-              perangkat ini.
-            </p>
+          <p className="mt-8 text-base text-slate-600">
+            Selamat datang 👋 <br /> Silakan pilih keperluan kunjungan Anda.
+          </p>
 
+          <div className="mt-6 grid gap-4">
+            {/* Tamu umum */}
             <Link
               href="/register"
-              className="mt-6 block w-full rounded-xl bg-rose-600 px-4 py-4 text-base font-semibold text-white shadow-sm transition hover:bg-rose-700"
+              className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 text-left shadow-sm transition hover:border-rose-300 hover:shadow-md"
             >
-              Daftar Kunjungan →
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-2xl">
+                👤
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="font-semibold text-slate-900">Tamu</div>
+                <div className="text-sm text-slate-500">
+                  Meeting, audit, kunjungan umum
+                </div>
+              </div>
+              <span className="text-rose-400 transition group-hover:translate-x-0.5">
+                →
+              </span>
+            </Link>
+
+            {/* Loading / Unloading */}
+            <Link
+              href="/loading"
+              className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 text-left shadow-sm transition hover:border-sky-300 hover:shadow-md"
+            >
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-2xl">
+                🚚
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="font-semibold text-slate-900">
+                  Loading / Unloading
+                </div>
+                <div className="text-sm text-slate-500">
+                  Muat / bongkar barang ke loading area
+                </div>
+              </div>
+              <span className="text-sky-400 transition group-hover:translate-x-0.5">
+                →
+              </span>
             </Link>
           </div>
 

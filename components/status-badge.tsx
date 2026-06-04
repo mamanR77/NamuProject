@@ -1,4 +1,4 @@
-import { VISIT_STATUS } from "@/lib/constants";
+import { VISIT_STATUS, VISIT_TYPE } from "@/lib/constants";
 
 const MAP: Record<string, { label: string; cls: string }> = {
   [VISIT_STATUS.PENDING]: {
@@ -34,6 +34,33 @@ export function StatusBadge({ status }: { status: string }) {
       className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ${meta.cls}`}
     >
       {meta.label}
+    </span>
+  );
+}
+
+export function TypeBadge({
+  type,
+  loadingType,
+}: {
+  type: string;
+  loadingType?: string | null;
+}) {
+  if (type === VISIT_TYPE.LOADING) {
+    const label =
+      loadingType === "UNLOADING"
+        ? "Unloading"
+        : loadingType === "LOADING"
+          ? "Loading"
+          : "Loading/Unloading";
+    return (
+      <span className="inline-block rounded-full bg-sky-50 px-2.5 py-0.5 text-xs font-semibold text-sky-700 ring-1 ring-sky-200">
+        🚚 {label}
+      </span>
+    );
+  }
+  return (
+    <span className="inline-block rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-600 ring-1 ring-slate-200">
+      Tamu
     </span>
   );
 }

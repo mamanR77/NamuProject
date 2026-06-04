@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-import { VISIT_STATUS } from "@/lib/constants";
-import { StatusBadge } from "@/components/status-badge";
+import { VISIT_STATUS, VISIT_TYPE, LOADING_TYPE_LABEL } from "@/lib/constants";
+import { StatusBadge, TypeBadge } from "@/components/status-badge";
 import { formatDateTime } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -88,10 +88,18 @@ export default async function AdminDashboard() {
                     )}
                   </div>
                   <div className="truncate text-xs text-slate-500">
-                    Menemui {v.host.name} · {formatDateTime(v.createdAt)}
+                    {v.visitType === VISIT_TYPE.LOADING
+                      ? `${LOADING_TYPE_LABEL[v.loadingType ?? ""] ?? "Loading/Unloading"}${v.vehiclePlate ? ` · ${v.vehiclePlate}` : ""}`
+                      : v.host
+                        ? `Menemui ${v.host.name}`
+                        : "Tanpa host"}{" "}
+                    · {formatDateTime(v.createdAt)}
                   </div>
                 </div>
-                <StatusBadge status={v.status} />
+                <div className="flex shrink-0 flex-col items-end gap-1">
+                  <StatusBadge status={v.status} />
+                  <TypeBadge type={v.visitType} loadingType={v.loadingType} />
+                </div>
               </div>
             ))}
           </div>

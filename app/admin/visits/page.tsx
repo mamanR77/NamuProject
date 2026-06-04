@@ -1,7 +1,12 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-import { VISIT_STATUS } from "@/lib/constants";
-import { StatusBadge } from "@/components/status-badge";
+import {
+  VISIT_STATUS,
+  VISIT_TYPE,
+  VISIT_TYPE_LABEL,
+  LOADING_TYPE_LABEL,
+} from "@/lib/constants";
+import { StatusBadge, TypeBadge } from "@/components/status-badge";
 import { formatDateTime } from "@/lib/format";
 import {
   approveVisitAction,
@@ -106,16 +111,27 @@ export default async function VisitsPage({
                 className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="min-w-0">
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span className="font-semibold text-slate-900">
                       {v.visitor.fullName}
                     </span>
                     <StatusBadge status={v.status} />
+                    <TypeBadge type={v.visitType} loadingType={v.loadingType} />
                   </div>
                   <div className="mt-0.5 text-sm text-slate-500">
-                    {v.visitor.company ? `${v.visitor.company} · ` : ""}
-                    Menemui {v.host.name}
-                    {v.host.department ? ` (${v.host.department.name})` : ""}
+                    {v.visitType === VISIT_TYPE.LOADING ? (
+                      <>
+                        {v.visitor.company ? `${v.visitor.company} · ` : ""}
+                        {v.vehiclePlate ?? "-"}
+                        {v.docNumber ? ` · ${v.docNumber}` : ""}
+                      </>
+                    ) : (
+                      <>
+                        {v.visitor.company ? `${v.visitor.company} · ` : ""}
+                        {v.host ? `Menemui ${v.host.name}` : "Tanpa host"}
+                        {v.host?.department ? ` (${v.host.department.name})` : ""}
+                      </>
+                    )}
                   </div>
                   <div className="mt-0.5 text-xs text-slate-400">
                     {v.purpose} · daftar {formatDateTime(v.createdAt)}
