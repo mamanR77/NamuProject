@@ -13,14 +13,18 @@ export default function Home() {
             Visitor Management System
           </p>
 
-          <p className="mt-8 text-base text-slate-700">
-            Selamat Datang di{" "}
-            <span className="font-semibold">
+          <div className="mt-8">
+            <p className="text-base text-slate-700">Selamat Datang di</p>
+            <p className="text-lg font-bold text-slate-900">
               PT Glico Manufacturing Indonesia
-            </span>
-            , Karawang Factory 👋
-          </p>
-          <p className="mt-1 text-base text-slate-600">
+            </p>
+            <p className="text-base text-slate-700">Karawang Factory</p>
+            <p className="mt-2 text-sm italic text-rose-600">
+              &ldquo;Healthier days, Wellbeing for life&rdquo;
+            </p>
+          </div>
+
+          <p className="mt-5 text-sm text-slate-600">
             Silakan pilih keperluan kunjungan Anda.
           </p>
 
