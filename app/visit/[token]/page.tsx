@@ -14,11 +14,11 @@ export const dynamic = "force-dynamic";
 const STATUS_STYLE: Record<string, { badgeClass: string; showBadge: boolean }> = {
   [VISIT_STATUS.PENDING_REVIEW]: {
     badgeClass: "bg-amber-50 text-amber-700 ring-amber-200",
-    showBadge: false,
+    showBadge: true,
   },
   [VISIT_STATUS.PENDING_CONFIRM]: {
     badgeClass: "bg-violet-50 text-violet-700 ring-violet-200",
-    showBadge: false,
+    showBadge: true,
   },
   [VISIT_STATUS.APPROVED]: {
     badgeClass: "bg-emerald-50 text-emerald-700 ring-emerald-200",

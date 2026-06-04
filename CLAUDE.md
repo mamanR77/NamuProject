@@ -209,6 +209,22 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — Fungsi QR: Security scan → buka kunjungan
+- **Konteks**: QR di halaman tamu sebelumnya tidak terpakai (sisa rencana scan check-in lama).
+  User pilih: **manfaatkan QR untuk Security scan → langsung buka kunjungan**.
+- **`/security/scan`** (+ `scanner.tsx`): pemindai kamera pakai **BarcodeDetector API**
+  (tanpa library) + `getUserMedia`; saat QR terbaca → `router.push(/security/visit/<token>)`.
+  Ada **fallback input manual** (ketik/tempel kode/link) bila browser tak mendukung kamera.
+- **`/security/visit/[token]`**: halaman kunjungan **fokus** (guard SECURITY/ADMIN) — detail
+  lengkap + tombol aksi sesuai tahap (Review OK/Tolak, Tandai Diterima, Check-in+kartu,
+  Check-out terkunci s/d TTD). Nama tamu di antrian kini tertaut ke sini; header antrian +
+  tombol **📷 Scan QR**.
+- QR di halaman tamu kini tampil selama kunjungan **aktif** (PENDING_REVIEW → CHECKED_IN)
+  agar bisa dipindai kapan saja.
+- **Verifikasi**: build/typecheck lolos; smoke test — /security/scan & /security/visit/[token]
+  HTTP 200, tombol aksi sesuai status, guard aktif. (Kamera tak diuji di env ini; ada fallback.)
+- Commit lokal (belum push).
+
 ### 2026-06-05 (lanjutan) — Tanda tangan digital penerima tamu (sign-off selesai)
 - **Permintaan user**: pengganti tanda tangan di form kertas. Penerima tamu **tanda tangan
   digital di HP tamu** sebagai bukti kunjungan selesai; **Check-out dikunci** sampai ada TTD.

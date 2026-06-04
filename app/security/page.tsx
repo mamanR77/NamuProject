@@ -81,11 +81,19 @@ export default async function SecurityPage({
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Antrian Kunjungan</h1>
-        <p className="text-sm text-slate-500">
-          Review, konfirmasi, check-in, dan check-out tamu.
-        </p>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Antrian Kunjungan</h1>
+          <p className="text-sm text-slate-500">
+            Review, konfirmasi, check-in, dan check-out tamu.
+          </p>
+        </div>
+        <Link
+          href="/security/scan"
+          className="shrink-0 rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+        >
+          📷 Scan QR
+        </Link>
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -128,9 +136,12 @@ export default async function SecurityPage({
                 >
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-semibold text-slate-900">
+                      <Link
+                        href={`/security/visit/${v.qrToken}`}
+                        className="font-semibold text-slate-900 hover:underline"
+                      >
                         {v.visitor.fullName}
-                      </span>
+                      </Link>
                       <StatusBadge status={v.status} />
                       <TypeBadge type={v.visitType} loadingType={v.loadingType} />
                     </div>
