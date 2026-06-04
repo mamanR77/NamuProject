@@ -6,12 +6,13 @@ export default function Home() {
     <main className="flex-1 flex flex-col px-6 py-10">
       <div className="flex flex-1 flex-col items-center justify-center">
         <div className="w-full max-w-md text-center">
-          <h1 className="text-5xl font-bold tracking-tight text-slate-900">
-            {APP_NAME}
-          </h1>
-          <p className="mt-2 text-sm font-medium uppercase tracking-wide text-slate-400">
-            Visitor Management System
-          </p>
+          {/* Logo Glico (ganti public/glico-logo.svg dengan logo resmi) */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/glico-logo.svg"
+            alt="Glico"
+            className="mx-auto h-20 w-auto"
+          />
 
           <div className="mt-8">
             <p className="text-base text-slate-700">Selamat Datang di</p>
@@ -72,11 +73,15 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Link kecil & samar untuk staff (modul terpisah) */}
-      <div className="pt-6 text-center">
+      {/* Branding aplikasi (kecil) + link staff */}
+      <div className="space-y-1 pt-6 text-center">
+        <p className="text-xs text-slate-400">
+          <span className="font-semibold text-slate-500">{APP_NAME}</span> ·
+          Visitor Management System
+        </p>
         <Link
           href="/staff/login"
-          className="text-xs text-slate-300 transition hover:text-slate-500"
+          className="inline-block text-xs text-slate-300 transition hover:text-slate-500"
         >
           Login Staff
         </Link>
