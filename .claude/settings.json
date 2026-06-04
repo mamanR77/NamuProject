@@ -21,7 +21,9 @@
       "Bash(break)",
       "Bash(node -e \"console.log\\(require\\('crypto'\\).randomBytes\\(32\\).toString\\('hex'\\)\\)\")",
       "Bash(node --import tsx -e ' *)",
-      "Bash(git commit -q -m 'Dashboard Super Admin + Auth staff *)"
+      "Bash(git commit -q -m 'Dashboard Super Admin + Auth staff *)",
+      "Bash(git rm *)",
+      "Bash(git commit *)"
     ]
   }
 }

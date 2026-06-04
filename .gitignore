@@ -42,6 +42,11 @@ next-env.d.ts
 
 /app/generated/prisma
 
+# Namu runtime logs
+dev.log
+*.tmp
+.cookie.tmp
+
 # Prisma (Namu)
 /generated/prisma
 prisma/dev.db
