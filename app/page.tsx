@@ -32,9 +32,8 @@ export default function Home() {
                 👤
               </div>
               <div className="min-w-0 flex-1">
-                <div className="font-semibold text-slate-900">Tamu</div>
-                <div className="text-sm text-slate-500">
-                  Meeting, audit, kunjungan umum
+                <div className="font-semibold text-slate-900">
+                  Kunjungan Umum
                 </div>
               </div>
               <span className="text-rose-400 transition group-hover:translate-x-0.5">
@@ -53,9 +52,6 @@ export default function Home() {
               <div className="min-w-0 flex-1">
                 <div className="font-semibold text-slate-900">
                   Loading / Unloading
-                </div>
-                <div className="text-sm text-slate-500">
-                  Muat / bongkar barang ke loading area
                 </div>
               </div>
               <span className="text-sky-400 transition group-hover:translate-x-0.5">

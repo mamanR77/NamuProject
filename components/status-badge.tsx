@@ -60,7 +60,7 @@ export function TypeBadge({
   }
   return (
     <span className="inline-block rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-600 ring-1 ring-slate-200">
-      Tamu
+      Kunjungan Umum
     </span>
   );
 }

@@ -28,7 +28,7 @@ export default async function RegisterPage() {
 
         <header className="mt-4">
           <h1 className="text-2xl font-bold text-slate-900">
-            Pendaftaran Tamu
+            Pendaftaran Kunjungan Umum
           </h1>
           <p className="mt-1 text-sm text-slate-600">
             Isi data berikut. Setelah mendaftar, kunjungan Anda menunggu

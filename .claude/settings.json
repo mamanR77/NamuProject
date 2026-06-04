@@ -36,7 +36,9 @@
       "Bash(curl -s -o /tmp/home.html -w \"%{http_code}\" --max-time 30 http://localhost:3001/)",
       "PowerShell(try { \\(Get-NetTCPConnection -LocalPort 3001 -State Listen -ErrorAction Stop\\).OwningProcess | Select-Object -Unique | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue; Write-Host \"Stopped PID $_\" } } catch { Write-Host \"no listener 3001\" })",
       "Bash(curl -s http://localhost:3001/visit/__TRACKED_VAR__)",
-      "Bash(curl -s -o /tmp/v.html -w '%{http_code}' -b namu_session=__TRACKED_VAR__ http://localhost:3001/admin/visits)"
+      "Bash(curl -s -o /tmp/v.html -w '%{http_code}' -b namu_session=__TRACKED_VAR__ http://localhost:3001/admin/visits)",
+      "Bash(curl -s \"http://localhost:3001/\")",
+      "Bash(curl -s \"http://localhost:3001/register\")"
     ]
   }
 }

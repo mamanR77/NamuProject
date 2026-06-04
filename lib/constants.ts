@@ -16,7 +16,7 @@ export const VISIT_TYPE = {
 export type VisitType = (typeof VISIT_TYPE)[keyof typeof VISIT_TYPE];
 
 export const VISIT_TYPE_LABEL: Record<string, string> = {
-  GENERAL: "Tamu",
+  GENERAL: "Kunjungan Umum",
   LOADING: "Loading/Unloading",
 };
 
