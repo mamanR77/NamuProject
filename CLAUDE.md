@@ -66,12 +66,12 @@ Status kunjungan: `PENDING` → `APPROVED` → `CHECKED_IN` → `CHECKED_OUT`
 ## 4. Fitur MVP (versi pertama)
 
 Dikonfirmasi user — keempatnya WAJIB:
-- [ ] **Self-registration tamu via QR** (mobile web di perangkat tamu)
-- [ ] **Approval / konfirmasi tamu** oleh host (atau security)
-- [ ] **Badge / kartu tamu + QR code**
-- [ ] **Notifikasi ke host** saat tamu mendaftar/datang
-- [ ] **Dashboard monitoring real-time** (siapa yang sedang di dalam gedung)
-- [ ] **Checkout tamu**
+- [x] **Self-registration tamu via QR** (mobile web di perangkat tamu) — M2
+- [x] **Approval / konfirmasi tamu** (via Dashboard Super Admin) — host khusus menyusul
+- [x] **Badge / kartu tamu + QR code** (digital, muncul saat approved) — M2
+- [ ] **Notifikasi ke host** — in-app (record) sudah dibuat; WhatsApp belum
+- [x] **Dashboard monitoring** (statistik + daftar) — versi real-time (auto-refresh) di M5
+- [x] **Checkout tamu** (aksi check-out di dashboard) — scan QR di M4
 
 ### Backlog (post-MVP, belum dikerjakan)
 - Pre-registration oleh host + kirim QR ke tamu sebelum datang
@@ -154,7 +154,9 @@ namu/
   seed data, landing page. Auth staff menyusul di M3.
 - **M2 — Registrasi tamu** ✅ (2026-06-04): form self-register, simpan Visit PENDING,
   halaman status + badge QR, notifikasi in-app ke host.
-- **M3 — Approval & notifikasi**: antrian approval host, notifikasi in-app/email.
+- **M3 — Auth staff + Approval + Notifikasi**: 🟡 sebagian (2026-06-04):
+  ✅ auth staff (login/session), ✅ Dashboard Super Admin (approval, kelola kunjungan,
+  user, departemen). ⬜ Tersisa: notifikasi WhatsApp + area khusus host/security.
 - **M4 — Badge & check-in/out**: generate QR badge, scan check-in/checkout.
 - **M5 — Dashboard real-time**: monitoring tamu di dalam gedung.
 - **M6 — Polish & deploy internal**: hardening, seed data, panduan deploy on-prem.
@@ -231,5 +233,24 @@ npm run db:studio           # GUI lihat data (Prisma Studio)
   - Alur: tamu isi form → redirect ke `/visit/[qrToken]` → tunggu approval.
   - **Verifikasi**: build + typecheck lolos; smoke test runtime (home, /register dengan
     daftar host dari DB, /visit/[token] status PENDING) semua HTTP 200 & render benar.
+- Commit M2 lokal `fe148f4`. **Belum push.**
+- **Dashboard Super Admin + Auth (atas permintaan user) SELESAI:**
+  - **Auth staff** (`lib/auth.ts`): session cookie httpOnly + JWT via `jose` (paket baru
+    ditambahkan), `bcryptjs` verify password, `getCurrentUser`, `requireAdmin`/`requireRole`.
+    `SESSION_SECRET` di `.env` (+ `.env.example`). Role **ADMIN = Super Admin**.
+  - **Login** `/staff/login` (+ `/staff` redirect cerdas). Akun: admin@glico.local/password123.
+  - **Area `/admin`** (guard ADMIN, layout sidebar + logout):
+    - Dashboard: 4 kartu statistik (tamu hari ini, menunggu approval, sedang di dalam,
+      total tamu) + daftar aktivitas terbaru.
+    - **Kunjungan** `/admin/visits`: filter status + aksi lifecycle penuh
+      (Setujui/Tolak/Check-in/Check-out) via server actions, link badge.
+    - **Pengguna** `/admin/users`: daftar + tambah user (role/WA/departemen) + hapus.
+    - **Departemen** `/admin/departments`: daftar + tambah.
+  - Komponen `components/status-badge.tsx`, util `lib/format.ts`.
+  - **Verifikasi**: build/typecheck lolos; smoke test runtime — tanpa login `/admin`→307
+    ke login, dengan session admin valid keempat halaman admin→200 (query DB jalan).
+  - ⚙️ Catatan dev: minting cookie uji pakai `node --import tsx` (bukan `npx tsx -e`),
+    dan hati-hati `process.exit()` memotong flush stdout pada pipe.
 - Status: **belum push** (menunggu konfirmasi user).
-- **Berikutnya (M3)**: auth staff + halaman approval host + kirim notifikasi WhatsApp.
+- **Berikutnya**: notifikasi WhatsApp (adapter) saat tamu daftar/approve; area host/security;
+  lalu M4 (scan QR check-in/out) & M5 (dashboard monitoring real-time).

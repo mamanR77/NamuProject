@@ -17,7 +17,11 @@
       "Bash(npx tsx *)",
       "Bash(curl -s --max-time 40 http://localhost:3001/visit/__TRACKED_VAR__ -w '\\\\nHTTP %{http_code}\\\\n')",
       "PowerShell(try { $c = Get-NetTCPConnection -LocalPort 3001 -State Listen -ErrorAction Stop; $c.OwningProcess | Select-Object -Unique | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue; Write-Host \"Stopped PID $_\" } } catch { Write-Host \"No listener on 3001\" }; Remove-Item \"D:\\\\Namu\\\\home.html\",\"D:\\\\Namu\\\\reg.html\",\"D:\\\\Namu\\\\dev.log\" -ErrorAction SilentlyContinue; Write-Host \"cleaned temp files\")",
-      "Bash(git commit -q -m 'M2: Registrasi tamu via QR + halaman status & badge *)"
+      "Bash(git commit -q -m 'M2: Registrasi tamu via QR + halaman status & badge *)",
+      "Bash(break)",
+      "Bash(node -e \"console.log\\(require\\('crypto'\\).randomBytes\\(32\\).toString\\('hex'\\)\\)\")",
+      "Bash(node --import tsx -e ' *)",
+      "Bash(git commit -q -m 'Dashboard Super Admin + Auth staff *)"
     ]
   }
 }
