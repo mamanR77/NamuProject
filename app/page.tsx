@@ -3,62 +3,54 @@ import { APP_NAME } from "@/lib/constants";
 
 export default function Home() {
   return (
-    <main className="flex-1 flex flex-col items-center justify-center px-6 py-16">
-      <div className="w-full max-w-3xl text-center">
-        <div className="inline-flex items-center gap-2 rounded-full bg-rose-50 px-4 py-1.5 text-sm font-medium text-rose-700 ring-1 ring-rose-200">
-          <span className="h-2 w-2 rounded-full bg-rose-500" />
-          PT Glico Manufacturing Indonesia
-        </div>
+    <main className="flex-1 flex flex-col px-6 py-10">
+      {/* Konten utama: sambutan untuk TAMU */}
+      <div className="flex flex-1 flex-col items-center justify-center">
+        <div className="w-full max-w-md text-center">
+          <div className="inline-flex items-center gap-2 rounded-full bg-rose-50 px-4 py-1.5 text-sm font-medium text-rose-700 ring-1 ring-rose-200">
+            <span className="h-2 w-2 rounded-full bg-rose-500" />
+            PT Glico Manufacturing Indonesia
+          </div>
 
-        <h1 className="mt-6 text-5xl font-bold tracking-tight text-slate-900">
-          {APP_NAME}
-        </h1>
-        <p className="mt-3 text-lg text-slate-600">
-          Visitor Management System — penerimaan, konfirmasi, monitoring, dan
-          checkout tamu secara digital.
-        </p>
+          <h1 className="mt-6 text-5xl font-bold tracking-tight text-slate-900">
+            {APP_NAME}
+          </h1>
+          <p className="mt-2 text-sm font-medium uppercase tracking-wide text-slate-400">
+            Visitor Management System
+          </p>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2">
-          {/* Pintu masuk TAMU */}
-          <Link
-            href="/register"
-            className="group rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm transition hover:border-rose-300 hover:shadow-md"
-          >
-            <div className="text-2xl">🧑‍💼</div>
-            <h2 className="mt-3 text-lg font-semibold text-slate-900">
-              Saya Tamu
+          <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
+            <div className="text-4xl">👋</div>
+            <h2 className="mt-3 text-xl font-semibold text-slate-900">
+              Selamat Datang
             </h2>
             <p className="mt-1 text-sm text-slate-600">
-              Daftar kunjungan & dapatkan badge digital. Scan QR di lobby atau
-              tekan di sini.
+              Silakan daftarkan kunjungan Anda. Pendaftaran cukup dilakukan dari
+              perangkat ini.
             </p>
-            <span className="mt-4 inline-block text-sm font-medium text-rose-600 group-hover:underline">
-              Mulai daftar →
-            </span>
-          </Link>
 
-          {/* Pintu masuk STAFF */}
-          <Link
-            href="/staff"
-            className="group rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm transition hover:border-slate-400 hover:shadow-md"
-          >
-            <div className="text-2xl">🛡️</div>
-            <h2 className="mt-3 text-lg font-semibold text-slate-900">
-              Staff / Security
-            </h2>
-            <p className="mt-1 text-sm text-slate-600">
-              Login untuk approval, monitoring tamu real-time, dan check-in /
-              checkout.
-            </p>
-            <span className="mt-4 inline-block text-sm font-medium text-slate-700 group-hover:underline">
-              Masuk dashboard →
-            </span>
-          </Link>
+            <Link
+              href="/register"
+              className="mt-6 block w-full rounded-xl bg-rose-600 px-4 py-4 text-base font-semibold text-white shadow-sm transition hover:bg-rose-700"
+            >
+              Daftar Kunjungan →
+            </Link>
+          </div>
+
+          <p className="mt-6 text-xs text-slate-400">
+            Sistem internal — hanya dapat diakses dari jaringan perusahaan.
+          </p>
         </div>
+      </div>
 
-        <p className="mt-10 text-xs text-slate-400">
-          Sistem internal — hanya dapat diakses dari jaringan perusahaan.
-        </p>
+      {/* Link kecil & samar untuk staff (modul terpisah) */}
+      <div className="pt-6 text-center">
+        <Link
+          href="/staff/login"
+          className="text-xs text-slate-300 transition hover:text-slate-500"
+        >
+          Login Staff
+        </Link>
       </div>
     </main>
   );

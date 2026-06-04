@@ -203,6 +203,16 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-04 (lanjutan) — Halaman utama khusus Tamu
+- **Permintaan user**: halaman utama (`/`) langsung fokus **Tamu** saja; modul Staff/Security
+  dipisah. Perubahan `app/page.tsx`:
+  - Hapus kartu "Saya Tamu" vs "Staff / Security". Ganti jadi halaman **sambutan** + tombol
+    besar **"Daftar Kunjungan"** → `/register`.
+  - Akses staff jadi **link kecil/samar "Login Staff"** di pojok bawah → `/staff/login`
+    (modul terpisah, tidak menonjol di halaman tamu).
+  - Smoke test: `/` HTTP 200, menampilkan sambutan + Daftar Kunjungan + Login Staff; kartu
+    staff lama hilang. Commit lokal (belum push).
+
 ### 2026-06-04
 - Project diinisialisasi. Konteks & kebutuhan dikumpulkan dari user.
 - Ditetapkan: peran pengguna, alur bisnis, fitur MVP (4 fitur wajib + checkout).
