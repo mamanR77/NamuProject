@@ -78,8 +78,8 @@ async function main() {
     data: {
       visitorId: visitor.id,
       hostId: host.id,
-      purpose: "Meeting kerjasama supplier",
-      status: "PENDING",
+      purpose: "Meeting",
+      status: "PENDING_REVIEW",
     },
   });
 

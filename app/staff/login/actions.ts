@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { verifyPassword, createSession } from "@/lib/auth";
+import { ROLES } from "@/lib/constants";
 
 export type LoginState = { error?: string };
 
@@ -25,7 +26,7 @@ export async function loginAction(
   }
 
   await createSession(user.id);
-  // Untuk saat ini semua staff diarahkan ke /admin; guard di layout admin
-  // memastikan hanya ADMIN (Super Admin) yang boleh masuk.
+  // Arahkan sesuai role.
+  if (user.role === ROLES.SECURITY) redirect("/security");
   redirect("/admin");
 }

@@ -1,12 +1,16 @@
 import { VISIT_STATUS, VISIT_TYPE } from "@/lib/constants";
 
 const MAP: Record<string, { label: string; cls: string }> = {
-  [VISIT_STATUS.PENDING]: {
-    label: "Menunggu",
+  [VISIT_STATUS.PENDING_REVIEW]: {
+    label: "Menunggu Review",
     cls: "bg-amber-50 text-amber-700 ring-amber-200",
   },
+  [VISIT_STATUS.PENDING_CONFIRM]: {
+    label: "Menunggu Konfirmasi",
+    cls: "bg-violet-50 text-violet-700 ring-violet-200",
+  },
   [VISIT_STATUS.APPROVED]: {
-    label: "Disetujui",
+    label: "Diterima",
     cls: "bg-emerald-50 text-emerald-700 ring-emerald-200",
   },
   [VISIT_STATUS.REJECTED]: {

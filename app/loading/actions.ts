@@ -46,7 +46,7 @@ export async function registerLoadingAction(
       vehiclePlate,
       docNumber: docNumber || null,
       purpose,
-      status: VISIT_STATUS.PENDING,
+      status: VISIT_STATUS.PENDING_REVIEW,
       visitor: {
         create: {
           fullName,

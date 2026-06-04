@@ -49,14 +49,26 @@ export const VISIT_PURPOSES = [
 export const PURPOSE_OTHERS = "Others";
 
 export const VISIT_STATUS = {
-  PENDING: "PENDING", // tamu sudah daftar, menunggu approval host
-  APPROVED: "APPROVED", // disetujui host, belum masuk
-  REJECTED: "REJECTED", // ditolak host
+  PENDING_REVIEW: "PENDING_REVIEW", // tamu daftar, menunggu review Security
+  PENDING_CONFIRM: "PENDING_CONFIRM", // lolos review, menunggu konfirmasi karyawan/Warehouse
+  APPROVED: "APPROVED", // diterima (karyawan/Warehouse setuju), siap check-in
+  REJECTED: "REJECTED", // ditolak (saat review atau konfirmasi)
   CHECKED_IN: "CHECKED_IN", // tamu sudah di dalam gedung
   CHECKED_OUT: "CHECKED_OUT", // tamu sudah keluar
   EXPIRED: "EXPIRED", // kadaluarsa (mis. tidak datang)
 } as const;
 export type VisitStatus = (typeof VISIT_STATUS)[keyof typeof VISIT_STATUS];
+
+/// Label status (Bahasa Indonesia) untuk panel internal (Security/Admin).
+export const VISIT_STATUS_LABEL: Record<string, string> = {
+  PENDING_REVIEW: "Menunggu Review",
+  PENDING_CONFIRM: "Menunggu Konfirmasi",
+  APPROVED: "Diterima",
+  REJECTED: "Ditolak",
+  CHECKED_IN: "Di Dalam",
+  CHECKED_OUT: "Selesai",
+  EXPIRED: "Kedaluwarsa",
+};
 
 /// Status yang dianggap "tamu sedang berada di dalam gedung" (untuk dashboard real-time).
 export const INSIDE_STATUSES: VisitStatus[] = [VISIT_STATUS.CHECKED_IN];

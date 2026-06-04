@@ -202,10 +202,37 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 2. **TIDAK push apa pun ke GitHub sebelum user konfirmasi/perintah.**
    Repo: https://github.com/mamanR77/NamuProject (branch `main`).
 3. Bahasa komunikasi & dokumentasi: Indonesia.
+4. **Bahasa Indonesia = bahasa utama (main).** Halaman tamu dikerjakan & difinalkan versi
+   Indonesia dulu; terjemahan EN/JA menyusul **setelah versi Indonesia disetujui user**.
 
 ---
 
 ## 9. Changelog
+
+### 2026-06-05 — Modul Security + alur kunjungan bertahap
+- **Permintaan user**: alur Kunjungan Umum = tamu daftar → **review Security** → Security
+  **konfirmasi manual** ke karyawan (umum) / **Warehouse** (loading) → tandai diterima →
+  **Security check-in + input Nomor Kartu Tamu** → check-out. Maka dibuat **Modul Security**.
+- **Status baru** (`lib/constants.ts`): `PENDING_REVIEW` → `PENDING_CONFIRM` → `APPROVED`
+  → `CHECKED_IN` → `CHECKED_OUT` (+ `REJECTED`). Mengganti status lama `PENDING`.
+  Tambah `VISIT_STATUS_LABEL` (ID) untuk panel internal.
+- **Schema**: `Visit` + `cardNo` (Nomor Kartu Tamu) + `reviewedAt`. Migrasi `add_card_review`.
+  DB dev dibersihkan & reseed (status awal `PENDING_REVIEW`).
+- **Modul Security** (`app/security/`): guard role SECURITY/ADMIN, layout + logout,
+  halaman **Antrian Kunjungan** dengan filter + tombol per tahap: **Review OK / Tolak**,
+  **Tandai Diterima / Tolak**, **Check-in (+ input No. Kartu Tamu)**, **Check-out**.
+  Server actions di `app/security/actions.ts`. Loading dikonfirmasi ke "Warehouse".
+- **Login by role**: SECURITY → `/security`, ADMIN → `/admin` (+ `/staff` redirect).
+- **Admin**: aksi lifecycle lama dipindah ke Security; `/admin/visits` jadi overview
+  (status baru + filter + link "Antrian Security"); nav admin + link Security; statistik
+  "Menunggu" = PENDING_REVIEW + PENDING_CONFIRM. `StatusBadge` diperbarui.
+- **Halaman status tamu** + kamus i18n (ID/EN/JA) diperbarui untuk status baru.
+- **Registrasi** (umum & loading) kini set status awal `PENDING_REVIEW` (notifikasi host
+  in-app dihapus — konfirmasi manual oleh Security).
+- **Verifikasi**: build/typecheck lolos; smoke test — security queue tampil tombol per tahap,
+  guard /security (tanpa login → login), admin boleh akses /security, status tamu "Menunggu Review".
+- ⚠️ Catatan: **versi internal (Security/Admin) Bahasa Indonesia** (sesuai aturan: ID dulu).
+  Commit lokal (belum push).
 
 ### 2026-06-04 (lanjutan) — Multi-bahasa (i18n) halaman tamu
 - **Permintaan user**: pemilih bahasa di halaman depan, 3 bahasa: **Indonesia / English / 日本語**.

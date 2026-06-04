@@ -1,59 +1,20 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-import {
-  VISIT_STATUS,
-  VISIT_TYPE,
-  VISIT_TYPE_LABEL,
-  LOADING_TYPE_LABEL,
-} from "@/lib/constants";
+import { VISIT_STATUS, VISIT_TYPE } from "@/lib/constants";
 import { StatusBadge, TypeBadge } from "@/components/status-badge";
 import { formatDateTime } from "@/lib/format";
-import {
-  approveVisitAction,
-  rejectVisitAction,
-  checkInVisitAction,
-  checkOutVisitAction,
-} from "../actions";
 
 export const dynamic = "force-dynamic";
 
 const FILTERS = [
   { key: "ALL", label: "Semua" },
-  { key: VISIT_STATUS.PENDING, label: "Menunggu" },
-  { key: VISIT_STATUS.APPROVED, label: "Disetujui" },
+  { key: VISIT_STATUS.PENDING_REVIEW, label: "Menunggu Review" },
+  { key: VISIT_STATUS.PENDING_CONFIRM, label: "Menunggu Konfirmasi" },
+  { key: VISIT_STATUS.APPROVED, label: "Diterima" },
   { key: VISIT_STATUS.CHECKED_IN, label: "Di Dalam" },
   { key: VISIT_STATUS.CHECKED_OUT, label: "Selesai" },
+  { key: VISIT_STATUS.REJECTED, label: "Ditolak" },
 ];
-
-function SubmitBtn({
-  action,
-  visitId,
-  label,
-  tone,
-}: {
-  action: (formData: FormData) => Promise<void>;
-  visitId: string;
-  label: string;
-  tone: "approve" | "reject" | "neutral";
-}) {
-  const cls =
-    tone === "approve"
-      ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-      : tone === "reject"
-        ? "border border-rose-300 text-rose-600 hover:bg-rose-50"
-        : "bg-slate-900 hover:bg-slate-800 text-white";
-  return (
-    <form action={action}>
-      <input type="hidden" name="visitId" value={visitId} />
-      <button
-        type="submit"
-        className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${cls}`}
-      >
-        {label}
-      </button>
-    </form>
-  );
-}
 
 export default async function VisitsPage({
   searchParams,
@@ -72,11 +33,20 @@ export default async function VisitsPage({
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Kunjungan</h1>
-        <p className="text-sm text-slate-500">
-          Kelola seluruh aktivitas kunjungan tamu.
-        </p>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Kunjungan</h1>
+          <p className="text-sm text-slate-500">
+            Pantau seluruh kunjungan. Operasi (review/check-in) di Antrian
+            Security.
+          </p>
+        </div>
+        <Link
+          href="/security"
+          className="shrink-0 rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+        >
+          Antrian Security →
+        </Link>
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -105,86 +75,60 @@ export default async function VisitsPage({
           </p>
         ) : (
           <div className="divide-y divide-slate-100">
-            {visits.map((v) => (
-              <div
-                key={v.id}
-                className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="font-semibold text-slate-900">
-                      {v.visitor.fullName}
-                    </span>
-                    <StatusBadge status={v.status} />
-                    <TypeBadge type={v.visitType} loadingType={v.loadingType} />
+            {visits.map((v) => {
+              const isLoading = v.visitType === VISIT_TYPE.LOADING;
+              return (
+                <div
+                  key={v.id}
+                  className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-semibold text-slate-900">
+                        {v.visitor.fullName}
+                      </span>
+                      <StatusBadge status={v.status} />
+                      <TypeBadge type={v.visitType} loadingType={v.loadingType} />
+                    </div>
+                    <div className="mt-0.5 text-sm text-slate-500">
+                      {isLoading ? (
+                        <>
+                          {v.visitor.company ? `${v.visitor.company} · ` : ""}
+                          {v.vehiclePlate ?? "-"}
+                          {v.docNumber ? ` · ${v.docNumber}` : ""}
+                        </>
+                      ) : (
+                        <>
+                          {v.visitor.company ? `${v.visitor.company} · ` : ""}
+                          {v.host ? `Menemui ${v.host.name}` : "Warehouse"}
+                          {v.host?.department
+                            ? ` (${v.host.department.name})`
+                            : ""}
+                        </>
+                      )}
+                    </div>
+                    <div className="mt-0.5 text-xs text-slate-400">
+                      {v.purpose} · daftar {formatDateTime(v.createdAt)}
+                      {v.cardNo ? ` · Kartu: ${v.cardNo}` : ""}
+                      {v.checkInAt
+                        ? ` · masuk ${formatDateTime(v.checkInAt)}`
+                        : ""}
+                      {v.checkOutAt
+                        ? ` · keluar ${formatDateTime(v.checkOutAt)}`
+                        : ""}
+                    </div>
                   </div>
-                  <div className="mt-0.5 text-sm text-slate-500">
-                    {v.visitType === VISIT_TYPE.LOADING ? (
-                      <>
-                        {v.visitor.company ? `${v.visitor.company} · ` : ""}
-                        {v.vehiclePlate ?? "-"}
-                        {v.docNumber ? ` · ${v.docNumber}` : ""}
-                      </>
-                    ) : (
-                      <>
-                        {v.visitor.company ? `${v.visitor.company} · ` : ""}
-                        {v.host ? `Menemui ${v.host.name}` : "Tanpa host"}
-                        {v.host?.department ? ` (${v.host.department.name})` : ""}
-                      </>
-                    )}
-                  </div>
-                  <div className="mt-0.5 text-xs text-slate-400">
-                    {v.purpose} · daftar {formatDateTime(v.createdAt)}
-                    {v.checkInAt ? ` · masuk ${formatDateTime(v.checkInAt)}` : ""}
-                    {v.checkOutAt
-                      ? ` · keluar ${formatDateTime(v.checkOutAt)}`
-                      : ""}
-                  </div>
-                </div>
 
-                <div className="flex shrink-0 items-center gap-2">
-                  {v.status === VISIT_STATUS.PENDING && (
-                    <>
-                      <SubmitBtn
-                        action={approveVisitAction}
-                        visitId={v.id}
-                        label="Setujui"
-                        tone="approve"
-                      />
-                      <SubmitBtn
-                        action={rejectVisitAction}
-                        visitId={v.id}
-                        label="Tolak"
-                        tone="reject"
-                      />
-                    </>
-                  )}
-                  {v.status === VISIT_STATUS.APPROVED && (
-                    <SubmitBtn
-                      action={checkInVisitAction}
-                      visitId={v.id}
-                      label="Check-in"
-                      tone="neutral"
-                    />
-                  )}
-                  {v.status === VISIT_STATUS.CHECKED_IN && (
-                    <SubmitBtn
-                      action={checkOutVisitAction}
-                      visitId={v.id}
-                      label="Check-out"
-                      tone="neutral"
-                    />
-                  )}
                   <Link
                     href={`/visit/${v.qrToken}`}
                     target="_blank"
-                    className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100"
+                    className="shrink-0 rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100"
                   >
-                    Badge
+                    Detail
                   </Link>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

@@ -61,9 +61,11 @@ model Visit {
   vehiclePlate  String? // nomor polisi kendaraan (loading)
   docNumber     String? // No. PO / DO / Surat Jalan (loading)
   purpose       String
-  status        String         @default("PENDING")
+  status        String         @default("PENDING_REVIEW")
+  cardNo        String? // Nomor Kartu Tamu (Visitor Card), diisi Security saat check-in
   qrToken       String         @unique @default(cuid()) // token untuk badge & scan check-in/out
-  approvedAt    DateTime?
+  reviewedAt    DateTime? // saat Security menyetujui review
+  approvedAt    DateTime? // saat kunjungan diterima (karyawan/Warehouse setuju)
   rejectedAt    DateTime?
   checkInAt     DateTime?
   checkOutAt    DateTime?

@@ -11,8 +11,12 @@ export const dynamic = "force-dynamic";
 
 // Gaya & apakah badge ditampilkan, per status. Label/desc diambil dari kamus bahasa.
 const STATUS_STYLE: Record<string, { badgeClass: string; showBadge: boolean }> = {
-  [VISIT_STATUS.PENDING]: {
+  [VISIT_STATUS.PENDING_REVIEW]: {
     badgeClass: "bg-amber-50 text-amber-700 ring-amber-200",
+    showBadge: false,
+  },
+  [VISIT_STATUS.PENDING_CONFIRM]: {
+    badgeClass: "bg-violet-50 text-violet-700 ring-violet-200",
     showBadge: false,
   },
   [VISIT_STATUS.APPROVED]: {
@@ -52,8 +56,16 @@ export default async function VisitStatusPage({
   });
   if (!visit) notFound();
 
-  const style = STATUS_STYLE[visit.status] ?? STATUS_STYLE[VISIT_STATUS.PENDING];
-  const meta = t.status[visit.status] ?? t.status[VISIT_STATUS.PENDING];
+  const style =
+    STATUS_STYLE[visit.status] ?? STATUS_STYLE[VISIT_STATUS.PENDING_REVIEW];
+  const meta = t.status[visit.status] ?? t.status[VISIT_STATUS.PENDING_REVIEW];
+  const isLive = (
+    [
+      VISIT_STATUS.PENDING_REVIEW,
+      VISIT_STATUS.PENDING_CONFIRM,
+      VISIT_STATUS.APPROVED,
+    ] as string[]
+  ).includes(visit.status);
   const qr = style.showBadge ? await generateQrDataUrl(visit.qrToken) : null;
   const isLoading = visit.visitType === VISIT_TYPE.LOADING;
   const activityLabel =
@@ -61,7 +73,7 @@ export default async function VisitStatusPage({
 
   return (
     <main className="flex-1 px-5 py-8">
-      {visit.status === VISIT_STATUS.PENDING && <AutoRefresh seconds={5} />}
+      {isLive && <AutoRefresh seconds={5} />}
 
       <div className="mx-auto w-full max-w-md space-y-5">
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">

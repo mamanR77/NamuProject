@@ -44,7 +44,10 @@
       "Bash(curl -s -o /dev/null -w \"/Glico.png -> HTTP %{http_code} \\(%{content_type}\\)\\\\n\" \"http://localhost:3001/Glico.png\")",
       "Bash(curl -s -b namu_lang=__TRACKED_VAR__ http://localhost:3001/)",
       "Bash(curl -s -b namu_lang=__TRACKED_VAR__ http://localhost:3001/register)",
-      "Bash(curl -s -b namu_lang=ja http://localhost:3001/visit/__TRACKED_VAR__)"
+      "Bash(curl -s -b namu_lang=ja http://localhost:3001/visit/__TRACKED_VAR__)",
+      "Bash(curl -s -b namu_lang=id http://localhost:3001/visit/__TRACKED_VAR__)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} -> %{redirect_url}\\\\n\" \"http://localhost:3001/security\")",
+      "Bash(curl -s -o /dev/null -w 'admin->/security HTTP %{http_code}\\\\n' -b namu_session=__TRACKED_VAR__ http://localhost:3001/security)"
     ]
   }
 }

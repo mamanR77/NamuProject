@@ -6,6 +6,7 @@ export const dynamic = "force-dynamic";
 
 export default async function StaffIndex() {
   const user = await getCurrentUser();
-  if (user && user.role === ROLES.ADMIN) redirect("/admin");
+  if (user?.role === ROLES.ADMIN) redirect("/admin");
+  if (user?.role === ROLES.SECURITY) redirect("/security");
   redirect("/staff/login");
 }

@@ -16,7 +16,13 @@ export default async function AdminDashboard() {
   const [todayCount, pendingCount, insideCount, totalVisitors, recent] =
     await Promise.all([
       prisma.visit.count({ where: { createdAt: { gte: startOfToday() } } }),
-      prisma.visit.count({ where: { status: VISIT_STATUS.PENDING } }),
+      prisma.visit.count({
+        where: {
+          status: {
+            in: [VISIT_STATUS.PENDING_REVIEW, VISIT_STATUS.PENDING_CONFIRM],
+          },
+        },
+      }),
       prisma.visit.count({ where: { status: VISIT_STATUS.CHECKED_IN } }),
       prisma.visitor.count(),
       prisma.visit.findMany({

@@ -4,63 +4,15 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { requireAdmin, destroySession, hashPassword } from "@/lib/auth";
-import { ROLES, VISIT_STATUS, type Role } from "@/lib/constants";
-
-function revalidateAdmin() {
-  revalidatePath("/admin");
-  revalidatePath("/admin/visits");
-}
+import { ROLES, type Role } from "@/lib/constants";
 
 export async function logoutAction() {
   await destroySession();
   redirect("/staff/login");
 }
 
-// ---- Lifecycle kunjungan (form actions, mengembalikan void) ----
-
-export async function approveVisitAction(formData: FormData) {
-  await requireAdmin();
-  const id = String(formData.get("visitId") ?? "");
-  if (!id) return;
-  await prisma.visit.update({
-    where: { id },
-    data: { status: VISIT_STATUS.APPROVED, approvedAt: new Date(), rejectedAt: null },
-  });
-  revalidateAdmin();
-}
-
-export async function rejectVisitAction(formData: FormData) {
-  await requireAdmin();
-  const id = String(formData.get("visitId") ?? "");
-  if (!id) return;
-  await prisma.visit.update({
-    where: { id },
-    data: { status: VISIT_STATUS.REJECTED, rejectedAt: new Date() },
-  });
-  revalidateAdmin();
-}
-
-export async function checkInVisitAction(formData: FormData) {
-  await requireAdmin();
-  const id = String(formData.get("visitId") ?? "");
-  if (!id) return;
-  await prisma.visit.update({
-    where: { id },
-    data: { status: VISIT_STATUS.CHECKED_IN, checkInAt: new Date() },
-  });
-  revalidateAdmin();
-}
-
-export async function checkOutVisitAction(formData: FormData) {
-  await requireAdmin();
-  const id = String(formData.get("visitId") ?? "");
-  if (!id) return;
-  await prisma.visit.update({
-    where: { id },
-    data: { status: VISIT_STATUS.CHECKED_OUT, checkOutAt: new Date() },
-  });
-  revalidateAdmin();
-}
+// Catatan: aksi lifecycle kunjungan (review/konfirmasi/check-in/out) ada di
+// app/security/actions.ts dan dipakai oleh modul Security (Admin juga boleh).
 
 // ---- Kelola User staff ----
 

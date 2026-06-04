@@ -3,8 +3,6 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import {
-  NOTIFICATION_CHANNEL,
-  NOTIFICATION_TYPE,
   VISIT_STATUS,
   VISIT_PURPOSES,
   PURPOSE_OTHERS,
@@ -56,7 +54,7 @@ export async function registerVisitAction(
   const visit = await prisma.visit.create({
     data: {
       purpose,
-      status: VISIT_STATUS.PENDING,
+      status: VISIT_STATUS.PENDING_REVIEW,
       visitor: {
         create: {
           fullName,
@@ -66,16 +64,6 @@ export async function registerVisitAction(
         },
       },
       host: { connect: { id: hostId } },
-      notifications: {
-        create: {
-          user: { connect: { id: hostId } },
-          channel: NOTIFICATION_CHANNEL.IN_APP,
-          type: NOTIFICATION_TYPE.VISIT_REGISTERED,
-          message: `Tamu ${fullName}${
-            company ? ` (${company})` : ""
-          } mendaftar untuk menemui Anda.`,
-        },
-      },
     },
   });
 

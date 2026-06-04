@@ -209,17 +209,21 @@ const id: Dict = {
       purpose: "Keperluan",
     },
     status: {
-      PENDING: {
+      PENDING_REVIEW: {
+        label: "Menunggu Review",
+        desc: "Pendaftaran Anda terkirim dan sedang ditinjau oleh petugas Security. Halaman ini akan diperbarui otomatis.",
+      },
+      PENDING_CONFIRM: {
         label: "Menunggu Konfirmasi",
-        desc: "Pendaftaran Anda terkirim. Mohon tunggu persetujuan dari karyawan yang dituju. Halaman ini akan diperbarui otomatis.",
+        desc: "Security sedang mengonfirmasi kunjungan Anda ke pihak yang dituju. Mohon tunggu.",
       },
       APPROVED: {
-        label: "Disetujui",
-        desc: "Kunjungan Anda disetujui. Tunjukkan badge QR di bawah kepada petugas security untuk check-in.",
+        label: "Diterima",
+        desc: "Kunjungan Anda diterima. Silakan menuju pos Security untuk proses check-in.",
       },
       CHECKED_IN: {
         label: "Sedang Berkunjung",
-        desc: "Anda sudah check-in. Simpan badge ini untuk proses checkout saat keluar.",
+        desc: "Anda sudah check-in. Simpan kartu tamu Anda untuk proses checkout saat keluar.",
       },
       REJECTED: {
         label: "Ditolak",
@@ -329,17 +333,21 @@ const en: Dict = {
       purpose: "Purpose",
     },
     status: {
-      PENDING: {
+      PENDING_REVIEW: {
+        label: "Under Review",
+        desc: "Your registration has been submitted and is being reviewed by Security. This page updates automatically.",
+      },
+      PENDING_CONFIRM: {
         label: "Awaiting Confirmation",
-        desc: "Your registration has been submitted. Please wait for approval from the person you are visiting. This page updates automatically.",
+        desc: "Security is confirming your visit with the host. Please wait.",
       },
       APPROVED: {
         label: "Approved",
-        desc: "Your visit has been approved. Show the QR badge below to the security officer to check in.",
+        desc: "Your visit has been approved. Please proceed to the Security post for check-in.",
       },
       CHECKED_IN: {
         label: "Visiting",
-        desc: "You have checked in. Keep this badge for checkout when you leave.",
+        desc: "You have checked in. Keep your visitor card for checkout when you leave.",
       },
       REJECTED: {
         label: "Rejected",
@@ -449,17 +457,21 @@ const ja: Dict = {
       purpose: "目的",
     },
     status: {
-      PENDING: {
+      PENDING_REVIEW: {
+        label: "確認中",
+        desc: "登録が完了し、警備員が確認しています。このページは自動的に更新されます。",
+      },
+      PENDING_CONFIRM: {
         label: "確認待ち",
-        desc: "登録が完了しました。面会先の承認をお待ちください。このページは自動的に更新されます。",
+        desc: "警備員が訪問先に確認を取っています。お待ちください。",
       },
       APPROVED: {
         label: "承認済み",
-        desc: "訪問が承認されました。下のQRバッジを警備員に提示してチェックインしてください。",
+        desc: "訪問が承認されました。受付（警備）でチェックインしてください。",
       },
       CHECKED_IN: {
         label: "訪問中",
-        desc: "チェックインが完了しました。退出時のチェックアウト用にこのバッジを保管してください。",
+        desc: "チェックインが完了しました。退出時のチェックアウト用に来訪者カードを保管してください。",
       },
       REJECTED: {
         label: "却下",
