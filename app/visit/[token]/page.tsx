@@ -6,6 +6,7 @@ import { generateQrDataUrl } from "@/lib/qr";
 import { getLocale } from "@/lib/locale";
 import { getDict } from "@/lib/i18n";
 import { AutoRefresh } from "./auto-refresh";
+import { SignaturePad } from "./signature-pad";
 
 export const dynamic = "force-dynamic";
 
@@ -104,6 +105,46 @@ export default async function VisitStatusPage({
             </div>
           )}
         </div>
+
+        {visit.status === VISIT_STATUS.CHECKED_IN && (
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            {visit.signedAt ? (
+              <div className="text-center">
+                <div className="text-3xl">✅</div>
+                <h2 className="mt-2 font-semibold text-slate-900">
+                  {t.sign.signedTitle}
+                </h2>
+                {visit.signedName && (
+                  <p className="mt-1 text-sm text-slate-600">
+                    {t.sign.signedBy}:{" "}
+                    <span className="font-medium text-slate-900">
+                      {visit.signedName}
+                    </span>
+                  </p>
+                )}
+                {visit.signatureData && (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={visit.signatureData}
+                    alt="Tanda tangan"
+                    className="mx-auto mt-3 h-24 rounded-lg border border-slate-200 bg-white"
+                  />
+                )}
+                <p className="mt-2 text-sm text-slate-500">
+                  {t.sign.signedNote}
+                </p>
+              </div>
+            ) : (
+              <>
+                <h2 className="font-semibold text-slate-900">{t.sign.title}</h2>
+                <p className="mt-1 text-sm text-slate-600">{t.sign.prompt}</p>
+                <div className="mt-3">
+                  <SignaturePad token={token} t={t.sign} />
+                </div>
+              </>
+            )}
+          </div>
+        )}
 
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-sm font-semibold text-slate-900">{t.detail}</h2>

@@ -67,11 +67,13 @@ export async function checkInAction(formData: FormData) {
   revalidate();
 }
 
-/// Check-out: CHECKED_IN -> CHECKED_OUT.
+/// Check-out: CHECKED_IN -> CHECKED_OUT. Wajib sudah ada tanda tangan penerima.
 export async function checkOutAction(formData: FormData) {
   await requireRole(ALLOWED);
   const id = visitId(formData);
   if (!id) return;
+  const visit = await prisma.visit.findUnique({ where: { id } });
+  if (!visit || !visit.signedAt) return; // terkunci sampai ada TTD penerima tamu
   await prisma.visit.update({
     where: { id },
     data: { status: VISIT_STATUS.CHECKED_OUT, checkOutAt: new Date() },

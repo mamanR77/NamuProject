@@ -200,14 +200,24 @@ export default async function SecurityPage({
                       </form>
                     )}
 
-                    {v.status === VISIT_STATUS.CHECKED_IN && (
-                      <ActionBtn
-                        action={checkOutAction}
-                        visitId={v.id}
-                        label="Check-out"
-                        tone="neutral"
-                      />
-                    )}
+                    {v.status === VISIT_STATUS.CHECKED_IN &&
+                      (v.signedAt ? (
+                        <div className="flex items-center gap-2">
+                          <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200">
+                            ✔ TTD: {v.signedName ?? "-"}
+                          </span>
+                          <ActionBtn
+                            action={checkOutAction}
+                            visitId={v.id}
+                            label="Check-out"
+                            tone="neutral"
+                          />
+                        </div>
+                      ) : (
+                        <span className="rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-700 ring-1 ring-amber-200">
+                          Menunggu TTD penerima tamu
+                        </span>
+                      ))}
                   </div>
                 </div>
               );

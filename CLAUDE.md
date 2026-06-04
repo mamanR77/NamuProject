@@ -209,6 +209,22 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — Tanda tangan digital penerima tamu (sign-off selesai)
+- **Permintaan user**: pengganti tanda tangan di form kertas. Penerima tamu **tanda tangan
+  digital di HP tamu** sebagai bukti kunjungan selesai; **Check-out dikunci** sampai ada TTD.
+- **Schema**: `Visit` + `signedAt`, `signedName`, `signatureData` (PNG data URL). Migrasi
+  `add_signature`.
+- **Halaman status tamu** (`/visit/[token]`) saat `CHECKED_IN`: tampil **SignaturePad**
+  (canvas, tanpa library) + input nama penerima. Setelah TTD → tampil konfirmasi
+  "Kunjungan Dikonfirmasi Selesai" + gambar TTD + nama. Server action `submitSignatureAction`
+  (validasi, hanya saat CHECKED_IN). Kamus `visit.sign` (ID/EN/JA).
+- **Security**: tombol **Check-out DIKUNCI** sampai `signedAt` ada — sebelum TTD tampil
+  "Menunggu TTD penerima tamu"; sesudah tampil "✔ TTD: <nama>" + Check-out. Penguncian juga
+  dijaga di server (`checkOutAction` menolak bila belum ada TTD).
+- **Verifikasi**: build/typecheck lolos; smoke test — pad muncul saat CHECKED_IN, Security
+  terkunci sebelum TTD, setelah TTD halaman tamu konfirmasi & Check-out aktif.
+- Commit lokal (belum push).
+
 ### 2026-06-05 — Modul Security + alur kunjungan bertahap
 - **Permintaan user**: alur Kunjungan Umum = tamu daftar → **review Security** → Security
   **konfirmasi manual** ke karyawan (umum) / **Warehouse** (loading) → tandai diterima →

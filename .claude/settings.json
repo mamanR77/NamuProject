@@ -47,7 +47,9 @@
       "Bash(curl -s -b namu_lang=ja http://localhost:3001/visit/__TRACKED_VAR__)",
       "Bash(curl -s -b namu_lang=id http://localhost:3001/visit/__TRACKED_VAR__)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} -> %{redirect_url}\\\\n\" \"http://localhost:3001/security\")",
-      "Bash(curl -s -o /dev/null -w 'admin->/security HTTP %{http_code}\\\\n' -b namu_session=__TRACKED_VAR__ http://localhost:3001/security)"
+      "Bash(curl -s -o /dev/null -w 'admin->/security HTTP %{http_code}\\\\n' -b namu_session=__TRACKED_VAR__ http://localhost:3001/security)",
+      "Bash(curl -s -b namu_session=__TRACKED_VAR__ http://localhost:3001/security)",
+      "Bash(node --import tsx -e \"import 'dotenv/config';import { PrismaClient } from './generated/prisma/client';import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';const p=new PrismaClient\\({adapter:new PrismaBetterSqlite3\\({url:process.env.DATABASE_URL||'file:./dev.db'}\\)}\\);const v=await p.visit.findFirst\\({where:{status:'CHECKED_IN'}}\\);console.log\\(v.qrToken\\);\")"
     ]
   }
 }

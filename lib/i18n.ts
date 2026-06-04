@@ -113,6 +113,20 @@ export interface Dict {
       meeting: string;
       purpose: string;
     };
+    sign: {
+      title: string;
+      prompt: string;
+      nameLabel: string;
+      namePlaceholder: string;
+      clear: string;
+      save: string;
+      saving: string;
+      emptyErr: string;
+      nameErr: string;
+      signedTitle: string;
+      signedBy: string;
+      signedNote: string;
+    };
     status: Record<string, StatusMsg>;
   };
 }
@@ -207,6 +221,21 @@ const id: Dict = {
       doc: "No. Dokumen",
       meeting: "Menemui",
       purpose: "Keperluan",
+    },
+    sign: {
+      title: "Selesai Kunjungan",
+      prompt:
+        "Mohon penerima tamu menandatangani di bawah sebagai konfirmasi kunjungan telah selesai.",
+      nameLabel: "Nama Penerima Tamu",
+      namePlaceholder: "Nama penerima",
+      clear: "Hapus",
+      save: "Simpan Tanda Tangan",
+      saving: "Menyimpan...",
+      emptyErr: "Tanda tangan masih kosong.",
+      nameErr: "Nama penerima wajib diisi.",
+      signedTitle: "Kunjungan Dikonfirmasi Selesai",
+      signedBy: "Ditandatangani oleh",
+      signedNote: "Silakan menuju pos Security untuk proses keluar.",
     },
     status: {
       PENDING_REVIEW: {
@@ -332,6 +361,21 @@ const en: Dict = {
       meeting: "Meeting",
       purpose: "Purpose",
     },
+    sign: {
+      title: "Finish Visit",
+      prompt:
+        "Please ask the host to sign below to confirm the visit is complete.",
+      nameLabel: "Host Name",
+      namePlaceholder: "Host name",
+      clear: "Clear",
+      save: "Save Signature",
+      saving: "Saving...",
+      emptyErr: "Signature is empty.",
+      nameErr: "Host name is required.",
+      signedTitle: "Visit Completion Confirmed",
+      signedBy: "Signed by",
+      signedNote: "Please proceed to the Security post to exit.",
+    },
     status: {
       PENDING_REVIEW: {
         label: "Under Review",
@@ -455,6 +499,20 @@ const ja: Dict = {
       doc: "書類番号",
       meeting: "面会先",
       purpose: "目的",
+    },
+    sign: {
+      title: "訪問終了",
+      prompt: "訪問終了の確認として、訪問先の方に下記へ署名をお願いします。",
+      nameLabel: "訪問先氏名",
+      namePlaceholder: "訪問先のお名前",
+      clear: "消去",
+      save: "署名を保存",
+      saving: "保存中...",
+      emptyErr: "署名が空です。",
+      nameErr: "訪問先氏名は必須です。",
+      signedTitle: "訪問終了が確認されました",
+      signedBy: "署名者",
+      signedNote: "退出のため警備（受付）へお進みください。",
     },
     status: {
       PENDING_REVIEW: {

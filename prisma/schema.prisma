@@ -68,6 +68,9 @@ model Visit {
   approvedAt    DateTime? // saat kunjungan diterima (karyawan/Warehouse setuju)
   rejectedAt    DateTime?
   checkInAt     DateTime?
+  signedAt      DateTime? // saat penerima tamu menandatangani konfirmasi selesai
+  signedName    String? // nama penerima tamu yang menandatangani
+  signatureData String? // tanda tangan (PNG data URL base64)
   checkOutAt    DateTime?
   notifications Notification[]
   createdAt     DateTime       @default(now())
