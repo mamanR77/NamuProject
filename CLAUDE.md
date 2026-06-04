@@ -152,7 +152,8 @@ namu/
 - **M0 — Setup** (saat ini): inisialisasi project, CLAUDE.md, keputusan stack.
 - **M1 — Fondasi** ✅ (2026-06-04): scaffold Next.js, Prisma schema, koneksi DB (adapter),
   seed data, landing page. Auth staff menyusul di M3.
-- **M2 — Registrasi tamu**: form self-register via QR, simpan Visit status PENDING.
+- **M2 — Registrasi tamu** ✅ (2026-06-04): form self-register, simpan Visit PENDING,
+  halaman status + badge QR, notifikasi in-app ke host.
 - **M3 — Approval & notifikasi**: antrian approval host, notifikasi in-app/email.
 - **M4 — Badge & check-in/out**: generate QR badge, scan check-in/checkout.
 - **M5 — Dashboard real-time**: monitoring tamu di dalam gedung.
@@ -217,5 +218,18 @@ npm run db:studio           # GUI lihat data (Prisma Studio)
   - Script npm: `db:migrate`, `db:seed`, `db:studio`, `db:reset`, `db:generate`.
   - `.gitignore` diperbarui (generated/, *.db). Build & typecheck **lolos bersih**.
   - **Temuan**: network corporate butuh `NODE_OPTIONS=--use-system-ca` untuk Prisma.
-- Status: belum ada git repo & belum push (sesuai aturan, menunggu konfirmasi user).
-- **Berikutnya (M2)**: form self-registration tamu via QR.
+- **Git repo lokal diinisialisasi** (branch `master`), commit M1 `62b0615`. **Belum di-push.**
+  Ditambahkan `.env.example`. (Git config lokal: user "Namu Dev".)
+- **M2 (Registrasi Tamu) SELESAI:**
+  - `lib/qr.ts` — generate badge QR sebagai data URL (pakai paket `qrcode`).
+  - `app/register/` — server action `registerVisitAction` (validasi, buat Visitor + Visit
+    status PENDING, sekaligus buat Notification IN_APP ke host) + form mobile-first
+    (client component `useActionState`) + halaman (ambil daftar host dari DB).
+  - `app/visit/[token]/` — halaman status kunjungan dengan UI per-status (PENDING/APPROVED/
+    REJECTED/CHECKED_IN/CHECKED_OUT/EXPIRED). Badge QR tampil saat APPROVED/CHECKED_IN.
+    Komponen `AutoRefresh` (poll 5 dtk saat PENDING agar tamu lihat approval otomatis).
+  - Alur: tamu isi form → redirect ke `/visit/[qrToken]` → tunggu approval.
+  - **Verifikasi**: build + typecheck lolos; smoke test runtime (home, /register dengan
+    daftar host dari DB, /visit/[token] status PENDING) semua HTTP 200 & render benar.
+- Status: **belum push** (menunggu konfirmasi user).
+- **Berikutnya (M3)**: auth staff + halaman approval host + kirim notifikasi WhatsApp.
