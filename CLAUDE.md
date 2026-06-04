@@ -207,6 +207,18 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-04 (lanjutan) — Multi-bahasa (i18n) halaman tamu
+- **Permintaan user**: pemilih bahasa di halaman depan, 3 bahasa: **Indonesia / English / 日本語**.
+  Cakupan = **halaman tamu saja** (dashboard staff/admin tetap Indonesia). Switcher = dropdown bendera.
+- **Implementasi i18n ringan** (tanpa library): `lib/i18n.ts` (kamus ID/EN/JA + `getDict`),
+  `lib/locale.ts` (baca cookie `namu_lang` di server), `components/language-switcher.tsx`
+  (dropdown bendera di pojok atas, set cookie + `router.refresh()`).
+- Diterjemahkan: **halaman utama**, **form Kunjungan Umum** (+ pesan error via locale),
+  **form Loading/Unloading** (+ error), **halaman status/badge `/visit/[token]`** (label, deskripsi
+  status, detail). Opsi "Tujuan Kedatangan" tetap istilah kanonik (Meeting, Audit, dst) di semua bahasa.
+- **Verifikasi**: build/typecheck lolos; smoke test ketiga bahasa di landing, /register, /loading,
+  /visit/[token] — semua string ter-translate sesuai cookie. Commit lokal (belum push).
+
 ### 2026-06-04 (lanjutan) — 2 Jenis Kunjungan: Tamu & Loading/Unloading
 - **Permintaan user**: ada 2 jenis tamu — (1) **Tamu umum** (meeting/audit/kunjungan) &
   (2) **Loading/Unloading** (sopir/barang ke loading area). Halaman utama jadi 2 pilihan.

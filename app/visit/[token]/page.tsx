@@ -1,58 +1,37 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
-import {
-  VISIT_STATUS,
-  VISIT_TYPE,
-  VISIT_TYPE_LABEL,
-  LOADING_TYPE_LABEL,
-} from "@/lib/constants";
+import { VISIT_STATUS, VISIT_TYPE, LOADING_TYPE } from "@/lib/constants";
 import { generateQrDataUrl } from "@/lib/qr";
+import { getLocale } from "@/lib/locale";
+import { getDict } from "@/lib/i18n";
 import { AutoRefresh } from "./auto-refresh";
 
 export const dynamic = "force-dynamic";
 
-type StatusMeta = {
-  label: string;
-  desc: string;
-  badgeClass: string;
-  showBadge: boolean;
-};
-
-const STATUS_META: Record<string, StatusMeta> = {
+// Gaya & apakah badge ditampilkan, per status. Label/desc diambil dari kamus bahasa.
+const STATUS_STYLE: Record<string, { badgeClass: string; showBadge: boolean }> = {
   [VISIT_STATUS.PENDING]: {
-    label: "Menunggu Konfirmasi",
-    desc: "Pendaftaran Anda terkirim. Mohon tunggu persetujuan dari karyawan yang dituju. Halaman ini akan diperbarui otomatis.",
     badgeClass: "bg-amber-50 text-amber-700 ring-amber-200",
     showBadge: false,
   },
   [VISIT_STATUS.APPROVED]: {
-    label: "Disetujui",
-    desc: "Kunjungan Anda disetujui. Tunjukkan badge QR di bawah kepada petugas security untuk check-in.",
     badgeClass: "bg-emerald-50 text-emerald-700 ring-emerald-200",
     showBadge: true,
   },
   [VISIT_STATUS.CHECKED_IN]: {
-    label: "Sedang Berkunjung",
-    desc: "Anda sudah check-in. Simpan badge ini untuk proses checkout saat keluar.",
     badgeClass: "bg-sky-50 text-sky-700 ring-sky-200",
     showBadge: true,
   },
   [VISIT_STATUS.REJECTED]: {
-    label: "Ditolak",
-    desc: "Mohon maaf, kunjungan Anda tidak dapat disetujui. Silakan hubungi karyawan yang dituju atau petugas resepsionis.",
     badgeClass: "bg-rose-50 text-rose-700 ring-rose-200",
     showBadge: false,
   },
   [VISIT_STATUS.CHECKED_OUT]: {
-    label: "Selesai",
-    desc: "Kunjungan Anda telah selesai. Terima kasih atas kunjungannya.",
     badgeClass: "bg-slate-100 text-slate-600 ring-slate-200",
     showBadge: false,
   },
   [VISIT_STATUS.EXPIRED]: {
-    label: "Kedaluwarsa",
-    desc: "Pendaftaran kunjungan ini telah kedaluwarsa. Silakan mendaftar ulang.",
     badgeClass: "bg-slate-100 text-slate-600 ring-slate-200",
     showBadge: false,
   },
@@ -64,6 +43,8 @@ export default async function VisitStatusPage({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
+  const locale = await getLocale();
+  const t = getDict(locale).visit;
 
   const visit = await prisma.visit.findUnique({
     where: { qrToken: token },
@@ -71,8 +52,12 @@ export default async function VisitStatusPage({
   });
   if (!visit) notFound();
 
-  const meta = STATUS_META[visit.status] ?? STATUS_META[VISIT_STATUS.PENDING];
-  const qr = meta.showBadge ? await generateQrDataUrl(visit.qrToken) : null;
+  const style = STATUS_STYLE[visit.status] ?? STATUS_STYLE[VISIT_STATUS.PENDING];
+  const meta = t.status[visit.status] ?? t.status[VISIT_STATUS.PENDING];
+  const qr = style.showBadge ? await generateQrDataUrl(visit.qrToken) : null;
+  const isLoading = visit.visitType === VISIT_TYPE.LOADING;
+  const activityLabel =
+    visit.loadingType === LOADING_TYPE.UNLOADING ? t.actUnloading : t.actLoading;
 
   return (
     <main className="flex-1 px-5 py-8">
@@ -82,10 +67,10 @@ export default async function VisitStatusPage({
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium uppercase tracking-wide text-slate-400">
-              Status Kunjungan
+              {t.statusTitle}
             </span>
             <span
-              className={`rounded-full px-3 py-1 text-xs font-semibold ring-1 ${meta.badgeClass}`}
+              className={`rounded-full px-3 py-1 text-xs font-semibold ring-1 ${style.badgeClass}`}
             >
               {meta.label}
             </span>
@@ -103,45 +88,43 @@ export default async function VisitStatusPage({
                 height={200}
                 className="rounded-lg bg-white p-2 shadow-sm"
               />
-              <span className="mt-2 text-xs text-slate-400">
-                Badge Digital Namu
-              </span>
+              <span className="mt-2 text-xs text-slate-400">{t.badge}</span>
             </div>
           )}
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-sm font-semibold text-slate-900">Detail</h2>
+          <h2 className="text-sm font-semibold text-slate-900">{t.detail}</h2>
           <dl className="mt-3 space-y-2 text-sm">
-            <Row label="Jenis" value={VISIT_TYPE_LABEL[visit.visitType] ?? "-"} />
-            {visit.visitType === VISIT_TYPE.LOADING ? (
+            <Row
+              label={t.f.type}
+              value={isLoading ? t.typeLoading : t.typeGeneral}
+            />
+            {isLoading ? (
               <>
-                <Row label="Sopir" value={visit.visitor.fullName} />
+                <Row label={t.f.driver} value={visit.visitor.fullName} />
                 {visit.visitor.company && (
-                  <Row label="Ekspedisi" value={visit.visitor.company} />
+                  <Row label={t.f.transporter} value={visit.visitor.company} />
                 )}
                 {visit.loadingType && (
-                  <Row
-                    label="Aktivitas"
-                    value={LOADING_TYPE_LABEL[visit.loadingType] ?? visit.loadingType}
-                  />
+                  <Row label={t.f.activity} value={activityLabel} />
                 )}
                 {visit.vehiclePlate && (
-                  <Row label="No. Polisi" value={visit.vehiclePlate} />
+                  <Row label={t.f.plate} value={visit.vehiclePlate} />
                 )}
                 {visit.docNumber && (
-                  <Row label="No. Dokumen" value={visit.docNumber} />
+                  <Row label={t.f.doc} value={visit.docNumber} />
                 )}
               </>
             ) : (
               <>
-                <Row label="Nama" value={visit.visitor.fullName} />
+                <Row label={t.f.name} value={visit.visitor.fullName} />
                 {visit.visitor.company && (
-                  <Row label="Perusahaan" value={visit.visitor.company} />
+                  <Row label={t.f.company} value={visit.visitor.company} />
                 )}
                 {visit.host && (
                   <Row
-                    label="Menemui"
+                    label={t.f.meeting}
                     value={`${visit.host.name}${
                       visit.host.department
                         ? ` (${visit.host.department.name})`
@@ -149,7 +132,7 @@ export default async function VisitStatusPage({
                     }`}
                   />
                 )}
-                <Row label="Keperluan" value={visit.purpose} />
+                <Row label={t.f.purpose} value={visit.purpose} />
               </>
             )}
           </dl>
@@ -159,7 +142,7 @@ export default async function VisitStatusPage({
           href="/"
           className="block text-center text-sm text-slate-500 hover:underline"
         >
-          Kembali ke beranda
+          {t.back}
         </Link>
       </div>
     </main>

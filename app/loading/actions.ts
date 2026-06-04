@@ -3,6 +3,8 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { VISIT_STATUS, VISIT_TYPE, LOADING_TYPE } from "@/lib/constants";
+import { getLocale } from "@/lib/locale";
+import { getDict } from "@/lib/i18n";
 
 export type LoadingState = {
   error?: string;
@@ -24,13 +26,14 @@ export async function registerLoadingAction(
   const docNumber = str(formData, "docNumber");
   const loadingType = str(formData, "loadingType");
 
+  const e = getDict(await getLocale()).loading.err;
   const fieldErrors: Record<string, string> = {};
-  if (!fullName) fieldErrors.fullName = "Nama sopir wajib diisi";
-  if (!phone) fieldErrors.phone = "Nomor HP wajib diisi";
-  if (!company) fieldErrors.company = "Nama ekspedisi/transporter wajib diisi";
-  if (!vehiclePlate) fieldErrors.vehiclePlate = "Nomor polisi wajib diisi";
+  if (!fullName) fieldErrors.fullName = e.driver;
+  if (!phone) fieldErrors.phone = e.phone;
+  if (!company) fieldErrors.company = e.transporter;
+  if (!vehiclePlate) fieldErrors.vehiclePlate = e.plate;
   if (loadingType !== LOADING_TYPE.LOADING && loadingType !== LOADING_TYPE.UNLOADING)
-    fieldErrors.loadingType = "Pilih aktivitas Loading atau Unloading";
+    fieldErrors.loadingType = e.activity;
   if (Object.keys(fieldErrors).length > 0) return { fieldErrors };
 
   const purpose =

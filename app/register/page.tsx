@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { ROLES } from "@/lib/constants";
+import { getLocale } from "@/lib/locale";
+import { getDict } from "@/lib/i18n";
 import { RegisterForm, type HostOption } from "./register-form";
 
-// Selalu ambil data host terbaru.
 export const dynamic = "force-dynamic";
 
 export default async function RegisterPage() {
+  const locale = await getLocale();
+  const t = getDict(locale).register;
+
   const hosts = await prisma.user.findMany({
     where: { role: ROLES.HOST },
     include: { department: true },
@@ -23,27 +27,19 @@ export default async function RegisterPage() {
     <main className="flex-1 px-5 py-8">
       <div className="mx-auto w-full max-w-md">
         <Link href="/" className="text-sm text-slate-500 hover:underline">
-          ← Kembali
+          {t.back}
         </Link>
 
         <header className="mt-4">
-          <h1 className="text-2xl font-bold text-slate-900">
-            Pendaftaran Kunjungan Umum
-          </h1>
-          <p className="mt-1 text-sm text-slate-600">
-            Isi data berikut. Setelah mendaftar, kunjungan Anda menunggu
-            konfirmasi dari karyawan yang dituju.
-          </p>
+          <h1 className="text-2xl font-bold text-slate-900">{t.title}</h1>
+          <p className="mt-1 text-sm text-slate-600">{t.subtitle}</p>
         </header>
 
         <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           {hostOptions.length === 0 ? (
-            <p className="text-sm text-slate-600">
-              Belum ada karyawan terdaftar sebagai tujuan kunjungan. Hubungi
-              petugas resepsionis.
-            </p>
+            <p className="text-sm text-slate-600">{t.noHost}</p>
           ) : (
-            <RegisterForm hosts={hostOptions} />
+            <RegisterForm hosts={hostOptions} t={t} />
           )}
         </div>
       </div>

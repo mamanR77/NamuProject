@@ -41,7 +41,10 @@
       "Bash(curl -s \"http://localhost:3001/register\")",
       "Bash(curl -s -o /tmp/h.html -w \"%{http_code}\" \"http://localhost:3001/\")",
       "Bash(curl -s -o /dev/null -w \"glico-logo.svg -> HTTP %{http_code} \\(%{content_type}\\)\\\\n\" \"http://localhost:3001/glico-logo.svg\")",
-      "Bash(curl -s -o /dev/null -w \"/Glico.png -> HTTP %{http_code} \\(%{content_type}\\)\\\\n\" \"http://localhost:3001/Glico.png\")"
+      "Bash(curl -s -o /dev/null -w \"/Glico.png -> HTTP %{http_code} \\(%{content_type}\\)\\\\n\" \"http://localhost:3001/Glico.png\")",
+      "Bash(curl -s -b namu_lang=__TRACKED_VAR__ http://localhost:3001/)",
+      "Bash(curl -s -b namu_lang=__TRACKED_VAR__ http://localhost:3001/register)",
+      "Bash(curl -s -b namu_lang=ja http://localhost:3001/visit/__TRACKED_VAR__)"
     ]
   }
 }

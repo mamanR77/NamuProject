@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import { registerVisitAction, type RegisterState } from "./actions";
 import { VISIT_PURPOSES, PURPOSE_OTHERS } from "@/lib/constants";
+import type { Dict } from "@/lib/i18n";
 
 export type HostOption = {
   id: string;
@@ -18,7 +19,13 @@ function FieldError({ msg }: { msg?: string }) {
   return <p className="mt-1 text-sm text-rose-600">{msg}</p>;
 }
 
-export function RegisterForm({ hosts }: { hosts: HostOption[] }) {
+export function RegisterForm({
+  hosts,
+  t,
+}: {
+  hosts: HostOption[];
+  t: Dict["register"];
+}) {
   const [state, formAction, pending] = useActionState<RegisterState, FormData>(
     registerVisitAction,
     {}
@@ -36,7 +43,7 @@ export function RegisterForm({ hosts }: { hosts: HostOption[] }) {
       {/* Tujuan Kedatangan — field pertama */}
       <div>
         <label className="text-sm font-medium text-slate-700">
-          Tujuan Kedatangan <span className="text-rose-500">*</span>
+          {t.purpose} <span className="text-rose-500">*</span>
         </label>
         <select
           name="purposeCategory"
@@ -45,7 +52,7 @@ export function RegisterForm({ hosts }: { hosts: HostOption[] }) {
           onChange={(e) => setPurpose(e.target.value)}
         >
           <option value="" disabled>
-            — Pilih tujuan kedatangan —
+            {t.purposePlaceholder}
           </option>
           {VISIT_PURPOSES.map((p) => (
             <option key={p} value={p}>
@@ -58,7 +65,7 @@ export function RegisterForm({ hosts }: { hosts: HostOption[] }) {
           <input
             name="purposeOther"
             className={`${inputClass} mt-2`}
-            placeholder="Tuliskan tujuan kedatangan Anda"
+            placeholder={t.purposeOther}
             autoFocus
           />
         )}
@@ -67,22 +74,24 @@ export function RegisterForm({ hosts }: { hosts: HostOption[] }) {
 
       <div>
         <label className="text-sm font-medium text-slate-700">
-          Nama Lengkap <span className="text-rose-500">*</span>
+          {t.fullName} <span className="text-rose-500">*</span>
         </label>
-        <input name="fullName" className={inputClass} placeholder="Nama Anda" />
+        <input
+          name="fullName"
+          className={inputClass}
+          placeholder={t.fullNamePlaceholder}
+        />
         <FieldError msg={state.fieldErrors?.fullName} />
       </div>
 
       <div>
-        <label className="text-sm font-medium text-slate-700">
-          Asal Perusahaan / Instansi
-        </label>
-        <input name="company" className={inputClass} placeholder="Opsional" />
+        <label className="text-sm font-medium text-slate-700">{t.company}</label>
+        <input name="company" className={inputClass} placeholder={t.optional} />
       </div>
 
       <div>
         <label className="text-sm font-medium text-slate-700">
-          Nomor HP <span className="text-rose-500">*</span>
+          {t.phone} <span className="text-rose-500">*</span>
         </label>
         <input
           name="phone"
@@ -96,18 +105,18 @@ export function RegisterForm({ hosts }: { hosts: HostOption[] }) {
 
       <div>
         <label className="text-sm font-medium text-slate-700">
-          Nomor Identitas (KTP/SIM)
+          {t.idNumber}
         </label>
-        <input name="idNumber" className={inputClass} placeholder="Opsional" />
+        <input name="idNumber" className={inputClass} placeholder={t.optional} />
       </div>
 
       <div>
         <label className="text-sm font-medium text-slate-700">
-          Karyawan yang Dituju <span className="text-rose-500">*</span>
+          {t.host} <span className="text-rose-500">*</span>
         </label>
         <select name="hostId" className={inputClass} defaultValue="">
           <option value="" disabled>
-            — Pilih karyawan —
+            {t.hostPlaceholder}
           </option>
           {hosts.map((h) => (
             <option key={h.id} value={h.id}>
@@ -124,7 +133,7 @@ export function RegisterForm({ hosts }: { hosts: HostOption[] }) {
         disabled={pending}
         className="w-full rounded-lg bg-rose-600 px-4 py-3 font-semibold text-white shadow-sm transition hover:bg-rose-700 disabled:opacity-60"
       >
-        {pending ? "Mengirim..." : "Daftar Kunjungan"}
+        {pending ? t.submitting : t.submit}
       </button>
     </form>
   );
