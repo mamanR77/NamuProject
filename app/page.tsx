@@ -6,20 +6,22 @@ export default function Home() {
     <main className="flex-1 flex flex-col px-6 py-10">
       <div className="flex flex-1 flex-col items-center justify-center">
         <div className="w-full max-w-md text-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-rose-50 px-4 py-1.5 text-sm font-medium text-rose-700 ring-1 ring-rose-200">
-            <span className="h-2 w-2 rounded-full bg-rose-500" />
-            PT Glico Manufacturing Indonesia
-          </div>
-
-          <h1 className="mt-6 text-5xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-5xl font-bold tracking-tight text-slate-900">
             {APP_NAME}
           </h1>
           <p className="mt-2 text-sm font-medium uppercase tracking-wide text-slate-400">
             Visitor Management System
           </p>
 
-          <p className="mt-8 text-base text-slate-600">
-            Selamat datang 👋 <br /> Silakan pilih keperluan kunjungan Anda.
+          <p className="mt-8 text-base text-slate-700">
+            Selamat Datang di{" "}
+            <span className="font-semibold">
+              PT Glico Manufacturing Indonesia
+            </span>
+            , Karawang Factory 👋
+          </p>
+          <p className="mt-1 text-base text-slate-600">
+            Silakan pilih keperluan kunjungan Anda.
           </p>
 
           <div className="mt-6 grid gap-4">
