@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"d:\\\\Namu\" status)",
+      "Bash(npm -v)",
+      "Bash(git --version)",
+      "Bash(npx --yes create-next-app@latest scaffold_tmp --ts --tailwind --app --eslint --import-alias \"@/*\" --no-src-dir --use-npm --no-turbopack --yes)",
+      "PowerShell($src = \"D:\\\\Namu\\\\scaffold_tmp\"; $dst = \"D:\\\\Namu\"; Get-ChildItem -Path $src -Force | ForEach-Object { $target = Join-Path $dst $_.Name; if \\(Test-Path $target\\) { Write-Host \"SKIP \\(exists\\): $\\($_.Name\\)\" } else { Move-Item -Path $_.FullName -Destination $target; Write-Host \"MOVED: $\\($_.Name\\)\" } }; Remove-Item -Path $src -Recurse -Force; Write-Host \"---DONE---\"; Get-ChildItem -Path $dst -Force | Select-Object Name)",
+      "Bash(npm install *)",
+      "Bash(npx prisma *)",
+      "Bash(export NODE_OPTIONS=--use-system-ca)",
+      "Bash(npm run *)",
+      "Bash(git init *)",
+      "Bash(git config *)",
+      "Bash(git add *)"
+    ]
+  }
+}

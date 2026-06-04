@@ -1,0 +1,89 @@
+// Namu — Visitor Management System
+// Schema dijaga portable: dev = SQLite, prod = PostgreSQL.
+// Catatan: SQLite tidak mendukung enum, jadi role/status/channel disimpan sebagai String.
+// Daftar nilai yang valid dipusatkan di lib/constants.ts.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+/// Departemen / divisi perusahaan (tempat host bernaung).
+model Department {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  users     User[]
+  createdAt DateTime @default(now())
+}
+
+/// Pengguna internal sistem: ADMIN | SECURITY | HOST.
+model User {
+  id            String         @id @default(cuid())
+  name          String
+  email         String         @unique
+  passwordHash  String
+  role          String         @default("HOST") // ADMIN | SECURITY | HOST
+  waNumber      String? // nomor WhatsApp untuk notifikasi (format internasional, mis. 62812...)
+  departmentId  String?
+  department    Department?    @relation(fields: [departmentId], references: [id])
+  hostedVisits  Visit[]        @relation("VisitHost")
+  notifications Notification[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+/// Data tamu (orang yang berkunjung). Bisa berkunjung berkali-kali.
+model Visitor {
+  id        String   @id @default(cuid())
+  fullName  String
+  company   String?
+  phone     String?
+  idNumber  String? // nomor identitas (KTP/SIM/dll) - opsional
+  photoUrl  String?
+  visits    Visit[]
+  createdAt DateTime @default(now())
+}
+
+/// Satu sesi kunjungan. Inti dari lifecycle VMS.
+/// status: PENDING -> APPROVED -> CHECKED_IN -> CHECKED_OUT (+ REJECTED, EXPIRED)
+model Visit {
+  id            String         @id @default(cuid())
+  visitorId     String
+  visitor       Visitor        @relation(fields: [visitorId], references: [id])
+  hostId        String
+  host          User           @relation("VisitHost", fields: [hostId], references: [id])
+  purpose       String
+  status        String         @default("PENDING")
+  qrToken       String         @unique @default(cuid()) // token untuk badge & scan check-in/out
+  approvedAt    DateTime?
+  rejectedAt    DateTime?
+  checkInAt     DateTime?
+  checkOutAt    DateTime?
+  notifications Notification[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([status])
+  @@index([hostId])
+}
+
+/// Notifikasi ke user (host/security). channel: IN_APP | WA.
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  visitId   String?
+  visit     Visit?    @relation(fields: [visitId], references: [id])
+  channel   String    @default("IN_APP") // IN_APP | WA
+  type      String // mis. VISIT_REGISTERED, VISIT_APPROVED, VISIT_CHECKED_IN
+  message   String
+  status    String    @default("PENDING") // PENDING | SENT | FAILED | READ
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
