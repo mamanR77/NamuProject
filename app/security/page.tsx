@@ -7,7 +7,8 @@ import {
   reviewOkAction,
   confirmAcceptAction,
   rejectAction,
-  checkInAction,
+  issueCardAction,
+  gateCheckInAction,
   checkOutAction,
 } from "./actions";
 
@@ -17,7 +18,8 @@ const FILTERS = [
   { key: "ACTIVE", label: "Perlu Tindakan" },
   { key: VISIT_STATUS.PENDING_REVIEW, label: "Menunggu Review" },
   { key: VISIT_STATUS.PENDING_CONFIRM, label: "Menunggu Konfirmasi" },
-  { key: VISIT_STATUS.APPROVED, label: "Siap Check-in" },
+  { key: VISIT_STATUS.APPROVED, label: "Siap Terbit Kartu" },
+  { key: VISIT_STATUS.CARD_ISSUED, label: "Menunggu Scan Masuk" },
   { key: VISIT_STATUS.CHECKED_IN, label: "Di Dalam" },
   { key: VISIT_STATUS.CHECKED_OUT, label: "Selesai" },
 ];
@@ -26,6 +28,7 @@ const ACTIVE_STATUSES = [
   VISIT_STATUS.PENDING_REVIEW,
   VISIT_STATUS.PENDING_CONFIRM,
   VISIT_STATUS.APPROVED,
+  VISIT_STATUS.CARD_ISSUED,
   VISIT_STATUS.CHECKED_IN,
 ];
 
@@ -194,7 +197,7 @@ export default async function SecurityPage({
                     )}
 
                     {v.status === VISIT_STATUS.APPROVED && (
-                      <form action={checkInAction} className="flex items-center gap-2">
+                      <form action={issueCardAction} className="flex items-center gap-2">
                         <input type="hidden" name="visitId" value={v.id} />
                         <input
                           name="cardNo"
@@ -206,16 +209,30 @@ export default async function SecurityPage({
                           type="submit"
                           className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
                         >
-                          Check-in
+                          Terbitkan Kartu
                         </button>
                       </form>
+                    )}
+
+                    {v.status === VISIT_STATUS.CARD_ISSUED && (
+                      <div className="flex items-center gap-2">
+                        <span className="rounded-full bg-violet-50 px-2.5 py-0.5 text-xs font-semibold text-violet-700 ring-1 ring-violet-200">
+                          Menunggu scan masuk
+                        </span>
+                        <ActionBtn
+                          action={gateCheckInAction}
+                          visitId={v.id}
+                          label="Tandai Masuk"
+                          tone="neutral"
+                        />
+                      </div>
                     )}
 
                     {v.status === VISIT_STATUS.CHECKED_IN &&
                       (v.signedAt ? (
                         <div className="flex items-center gap-2">
                           <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200">
-                            ✔ TTD: {v.signedName ?? "-"}
+                            ✔ Selesai: {v.signedName ?? "-"}
                           </span>
                           <ActionBtn
                             action={checkOutAction}
@@ -226,7 +243,7 @@ export default async function SecurityPage({
                         </div>
                       ) : (
                         <span className="rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-700 ring-1 ring-amber-200">
-                          Menunggu TTD penerima tamu
+                          Menunggu konfirmasi penerima tamu
                         </span>
                       ))}
                   </div>

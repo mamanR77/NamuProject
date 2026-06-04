@@ -209,6 +209,31 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — Alur barcode: terbit kartu, scan masuk/keluar, modul penerima tamu
+- **Permintaan user**: setelah Security terbitkan kartu, **barcode tamu aktif**; tamu **scan di pos**
+  untuk masuk (jadi "Di Dalam", layar HIJAU); **penerima tamu scan barcode** untuk konfirmasi selesai
+  (isi nama + **NIK** + tanda tangan, divalidasi NIK karyawan); checkout via **scan di pos keluar**.
+- **Status baru `CARD_ISSUED`** (Kartu Terbit) disisipkan antara APPROVED dan CHECKED_IN.
+- **Schema**: `User.nik` (unique, kunci validasi penerima tamu); `Visit.cardIssuedAt`, `Visit.signedNik`.
+  Migrasi manual `add_nik_card_issued` (ADD COLUMN + index unik). Seed: NIK Andi.
+- **Security**:
+  - Tombol check-in lama → **"Terbitkan Kartu"** (APPROVED→CARD_ISSUED + No. Kartu).
+  - **Gate Scan** (`/security/scan`, 1 modul): scan barcode → otomatis check-in (CARD_ISSUED→CHECKED_IN)
+    atau check-out (CHECKED_IN→CHECKED_OUT, untuk Umum wajib sudah ada konfirmasi selesai).
+    `gateScanAction`. Fallback "Tandai Masuk" manual di antrian.
+- **Modul Penerima Tamu** (`/selesai`, publik): scan barcode tamu → form **nama + NIK + tanda tangan**;
+  `submitCompletionAction` memvalidasi **NIK == NIK karyawan yang dituju** sebelum simpan (signedAt/
+  signedName/signedNik/signatureData). Hanya untuk Kunjungan Umum berstatus CHECKED_IN.
+- **Dashboard tamu**: barcode aktif mulai **Kartu Terbit**; saat **Di Dalam** tampil banner **HIJAU**
+  "Anda sudah check-in di PT Glico Manufacturing Indonesia". Signature pad lama di halaman tamu
+  **dihapus** (konfirmasi pindah ke modul penerima tamu).
+- **Admin**: field **NIK** di form pengguna (wajib untuk Host/penerima tamu) + tampil di daftar.
+- **Verifikasi**: build/typecheck lolos; smoke test — /selesai 200, CARD_ISSUED tampil barcode,
+  CHECKED_IN banner hijau, antrian Security "Terbitkan Kartu"/"Menunggu konfirmasi", Gate Scan render.
+  (Kamera tak diuji di env ini; ada fallback input manual.)
+- ⚠️ Loading/Unloading: konfirmasi selesai via NIK tidak berlaku (tanpa host); checkout loading
+  diizinkan tanpa gate konfirmasi. Commit lokal (belum push).
+
 ### 2026-06-05 (lanjutan) — Fungsi QR: Security scan → buka kunjungan
 - **Konteks**: QR di halaman tamu sebelumnya tidak terpakai (sisa rencana scan check-in lama).
   User pilih: **manfaatkan QR untuk Security scan → langsung buka kunjungan**.

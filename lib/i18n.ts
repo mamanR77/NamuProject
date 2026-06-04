@@ -101,6 +101,8 @@ export interface Dict {
     typeLoading: string;
     actLoading: string;
     actUnloading: string;
+    checkedInBanner: string;
+    toHostNote: string;
     f: {
       type: string;
       name: string;
@@ -210,6 +212,9 @@ const id: Dict = {
     typeLoading: "Loading/Unloading",
     actLoading: "Loading",
     actUnloading: "Unloading",
+    checkedInBanner: "Anda sudah check-in di PT Glico Manufacturing Indonesia",
+    toHostNote:
+      "Saat selesai, tunjukkan barcode ini kepada penerima tamu untuk konfirmasi.",
     f: {
       type: "Jenis",
       name: "Nama",
@@ -248,11 +253,15 @@ const id: Dict = {
       },
       APPROVED: {
         label: "Diterima",
-        desc: "Kunjungan Anda diterima. Silakan menuju pos Security untuk proses check-in.",
+        desc: "Kunjungan Anda diterima. Security akan menerbitkan kartu tamu Anda.",
+      },
+      CARD_ISSUED: {
+        label: "Kartu Terbit",
+        desc: "Kartu sudah diterbitkan. Tunjukkan barcode di bawah ke pos security untuk check-in.",
       },
       CHECKED_IN: {
         label: "Sedang Berkunjung",
-        desc: "Anda sudah check-in. Simpan kartu tamu Anda untuk proses checkout saat keluar.",
+        desc: "Simpan kartu tamu Anda untuk proses check-out saat keluar.",
       },
       REJECTED: {
         label: "Ditolak",
@@ -349,6 +358,9 @@ const en: Dict = {
     typeLoading: "Loading / Unloading",
     actLoading: "Loading",
     actUnloading: "Unloading",
+    checkedInBanner: "You have checked in at PT Glico Manufacturing Indonesia",
+    toHostNote:
+      "When finished, show this barcode to the host for confirmation.",
     f: {
       type: "Type",
       name: "Name",
@@ -387,11 +399,15 @@ const en: Dict = {
       },
       APPROVED: {
         label: "Approved",
-        desc: "Your visit has been approved. Please proceed to the Security post for check-in.",
+        desc: "Your visit has been approved. Security will issue your visitor card.",
+      },
+      CARD_ISSUED: {
+        label: "Card Issued",
+        desc: "Your card has been issued. Show the barcode below at the Security post to check in.",
       },
       CHECKED_IN: {
         label: "Visiting",
-        desc: "You have checked in. Keep your visitor card for checkout when you leave.",
+        desc: "Keep your visitor card for check-out when you leave.",
       },
       REJECTED: {
         label: "Rejected",
@@ -488,6 +504,8 @@ const ja: Dict = {
     typeLoading: "搬入 / 搬出",
     actLoading: "Loading",
     actUnloading: "Unloading",
+    checkedInBanner: "PT Glico Manufacturing Indonesia にチェックインしました",
+    toHostNote: "ご訪問終了時、このバーコードを訪問先にご提示ください。",
     f: {
       type: "種別",
       name: "氏名",
@@ -525,11 +543,15 @@ const ja: Dict = {
       },
       APPROVED: {
         label: "承認済み",
-        desc: "訪問が承認されました。受付（警備）でチェックインしてください。",
+        desc: "訪問が承認されました。警備が来訪者カードを発行します。",
+      },
+      CARD_ISSUED: {
+        label: "カード発行済み",
+        desc: "カードが発行されました。下のバーコードを警備の受付で提示してチェックインしてください。",
       },
       CHECKED_IN: {
         label: "訪問中",
-        desc: "チェックインが完了しました。退出時のチェックアウト用に来訪者カードを保管してください。",
+        desc: "退出時のチェックアウト用に来訪者カードを保管してください。",
       },
       REJECTED: {
         label: "却下",

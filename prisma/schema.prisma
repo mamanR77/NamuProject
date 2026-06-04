@@ -27,6 +27,7 @@ model User {
   username      String         @unique
   passwordHash  String
   role          String         @default("HOST") // ADMIN | SECURITY | HOST
+  nik           String?        @unique // NIK karyawan (penerima tamu) — kunci validasi konfirmasi selesai
   waNumber      String? // nomor WhatsApp untuk notifikasi (format internasional, mis. 62812...)
   departmentId  String?
   department    Department?    @relation(fields: [departmentId], references: [id])
@@ -66,12 +67,14 @@ model Visit {
   qrToken       String         @unique @default(cuid()) // token untuk badge & scan check-in/out
   reviewedAt    DateTime? // saat Security menyetujui review
   approvedAt    DateTime? // saat kunjungan diterima (karyawan/Warehouse setuju)
+  cardIssuedAt  DateTime? // saat Security menerbitkan kartu (barcode aktif)
   rejectedAt    DateTime?
-  checkInAt     DateTime?
-  signedAt      DateTime? // saat penerima tamu menandatangani konfirmasi selesai
-  signedName    String? // nama penerima tamu yang menandatangani
+  checkInAt     DateTime? // saat scan masuk di pos (tamu di dalam)
+  signedAt      DateTime? // saat penerima tamu konfirmasi selesai (via modul penerima tamu)
+  signedName    String? // nama penerima tamu yang konfirmasi
+  signedNik     String? // NIK penerima tamu yang konfirmasi
   signatureData String? // tanda tangan (PNG data URL base64)
-  checkOutAt    DateTime?
+  checkOutAt    DateTime? // saat scan keluar di pos
   notifications Notification[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt

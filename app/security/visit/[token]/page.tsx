@@ -16,7 +16,8 @@ import {
   reviewOkAction,
   confirmAcceptAction,
   rejectAction,
-  checkInAction,
+  issueCardAction,
+  gateCheckInAction,
   checkOutAction,
 } from "../../actions";
 
@@ -144,7 +145,7 @@ export default async function SecurityVisitPage({
         )}
 
         {visit.status === VISIT_STATUS.APPROVED && (
-          <form action={checkInAction} className="flex items-center gap-2">
+          <form action={issueCardAction} className="flex items-center gap-2">
             <input type="hidden" name="visitId" value={visit.id} />
             <input
               name="cardNo"
@@ -156,16 +157,30 @@ export default async function SecurityVisitPage({
               type="submit"
               className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
             >
-              Check-in
+              Terbitkan Kartu
             </button>
           </form>
+        )}
+
+        {visit.status === VISIT_STATUS.CARD_ISSUED && (
+          <div className="space-y-2">
+            <p className="rounded-lg bg-violet-50 px-3 py-2 text-sm text-violet-700 ring-1 ring-violet-200">
+              Kartu terbit. Tamu scan barcode di pos masuk untuk check-in.
+            </p>
+            <FormBtn
+              action={gateCheckInAction}
+              id={visit.id}
+              label="Tandai Masuk (manual)"
+              tone="neutral"
+            />
+          </div>
         )}
 
         {visit.status === VISIT_STATUS.CHECKED_IN &&
           (visit.signedAt ? (
             <div className="space-y-2">
               <p className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700 ring-1 ring-emerald-200">
-                ✔ Sudah ditandatangani penerima: {visit.signedName ?? "-"}
+                ✔ Konfirmasi selesai oleh penerima: {visit.signedName ?? "-"}
               </p>
               <FormBtn
                 action={checkOutAction}
@@ -176,7 +191,7 @@ export default async function SecurityVisitPage({
             </div>
           ) : (
             <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-700 ring-1 ring-amber-200">
-              Menunggu tanda tangan penerima tamu sebelum check-out.
+              Menunggu konfirmasi selesai dari penerima tamu sebelum check-out.
             </p>
           ))}
 

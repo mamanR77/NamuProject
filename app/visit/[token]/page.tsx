@@ -6,7 +6,6 @@ import { generateQrDataUrl } from "@/lib/qr";
 import { getLocale } from "@/lib/locale";
 import { getDict } from "@/lib/i18n";
 import { AutoRefresh } from "./auto-refresh";
-import { SignaturePad } from "./signature-pad";
 
 export const dynamic = "force-dynamic";
 
@@ -14,18 +13,22 @@ export const dynamic = "force-dynamic";
 const STATUS_STYLE: Record<string, { badgeClass: string; showBadge: boolean }> = {
   [VISIT_STATUS.PENDING_REVIEW]: {
     badgeClass: "bg-amber-50 text-amber-700 ring-amber-200",
-    showBadge: true,
+    showBadge: false,
   },
   [VISIT_STATUS.PENDING_CONFIRM]: {
     badgeClass: "bg-violet-50 text-violet-700 ring-violet-200",
-    showBadge: true,
+    showBadge: false,
   },
   [VISIT_STATUS.APPROVED]: {
     badgeClass: "bg-emerald-50 text-emerald-700 ring-emerald-200",
+    showBadge: false,
+  },
+  [VISIT_STATUS.CARD_ISSUED]: {
+    badgeClass: "bg-violet-50 text-violet-700 ring-violet-200",
     showBadge: true,
   },
   [VISIT_STATUS.CHECKED_IN]: {
-    badgeClass: "bg-sky-50 text-sky-700 ring-sky-200",
+    badgeClass: "bg-emerald-50 text-emerald-700 ring-emerald-200",
     showBadge: true,
   },
   [VISIT_STATUS.REJECTED]: {
@@ -60,11 +63,11 @@ export default async function VisitStatusPage({
   const style =
     STATUS_STYLE[visit.status] ?? STATUS_STYLE[VISIT_STATUS.PENDING_REVIEW];
   const meta = t.status[visit.status] ?? t.status[VISIT_STATUS.PENDING_REVIEW];
-  const isLive = (
+  const isLive = !(
     [
-      VISIT_STATUS.PENDING_REVIEW,
-      VISIT_STATUS.PENDING_CONFIRM,
-      VISIT_STATUS.APPROVED,
+      VISIT_STATUS.REJECTED,
+      VISIT_STATUS.CHECKED_OUT,
+      VISIT_STATUS.EXPIRED,
     ] as string[]
   ).includes(visit.status);
   const qr = style.showBadge ? await generateQrDataUrl(visit.qrToken) : null;
@@ -107,41 +110,28 @@ export default async function VisitStatusPage({
         </div>
 
         {visit.status === VISIT_STATUS.CHECKED_IN && (
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center shadow-sm">
+            <div className="text-4xl">✅</div>
+            <h2 className="mt-2 text-lg font-bold text-emerald-800">
+              {t.checkedInBanner}
+            </h2>
             {visit.signedAt ? (
-              <div className="text-center">
-                <div className="text-3xl">✅</div>
-                <h2 className="mt-2 font-semibold text-slate-900">
+              <div className="mt-3 rounded-xl bg-white/70 p-3">
+                <p className="text-sm font-semibold text-slate-900">
                   {t.sign.signedTitle}
-                </h2>
+                </p>
                 {visit.signedName && (
-                  <p className="mt-1 text-sm text-slate-600">
+                  <p className="text-sm text-slate-600">
                     {t.sign.signedBy}:{" "}
                     <span className="font-medium text-slate-900">
                       {visit.signedName}
                     </span>
                   </p>
                 )}
-                {visit.signatureData && (
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img
-                    src={visit.signatureData}
-                    alt="Tanda tangan"
-                    className="mx-auto mt-3 h-24 rounded-lg border border-slate-200 bg-white"
-                  />
-                )}
-                <p className="mt-2 text-sm text-slate-500">
-                  {t.sign.signedNote}
-                </p>
+                <p className="mt-1 text-sm text-slate-500">{t.sign.signedNote}</p>
               </div>
             ) : (
-              <>
-                <h2 className="font-semibold text-slate-900">{t.sign.title}</h2>
-                <p className="mt-1 text-sm text-slate-600">{t.sign.prompt}</p>
-                <div className="mt-3">
-                  <SignaturePad token={token} t={t.sign} />
-                </div>
-              </>
+              <p className="mt-2 text-sm text-emerald-700">{t.toHostNote}</p>
             )}
           </div>
         )}

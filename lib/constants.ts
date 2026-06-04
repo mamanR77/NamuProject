@@ -51,10 +51,11 @@ export const PURPOSE_OTHERS = "Others";
 export const VISIT_STATUS = {
   PENDING_REVIEW: "PENDING_REVIEW", // tamu daftar, menunggu review Security
   PENDING_CONFIRM: "PENDING_CONFIRM", // lolos review, menunggu konfirmasi karyawan/Warehouse
-  APPROVED: "APPROVED", // diterima (karyawan/Warehouse setuju), siap check-in
+  APPROVED: "APPROVED", // diterima (karyawan/Warehouse setuju), siap terbit kartu
+  CARD_ISSUED: "CARD_ISSUED", // kartu diterbitkan, barcode aktif, menunggu scan masuk di pos
+  CHECKED_IN: "CHECKED_IN", // tamu sudah di dalam gedung (setelah scan masuk)
   REJECTED: "REJECTED", // ditolak (saat review atau konfirmasi)
-  CHECKED_IN: "CHECKED_IN", // tamu sudah di dalam gedung
-  CHECKED_OUT: "CHECKED_OUT", // tamu sudah keluar
+  CHECKED_OUT: "CHECKED_OUT", // tamu sudah keluar (setelah scan keluar)
   EXPIRED: "EXPIRED", // kadaluarsa (mis. tidak datang)
 } as const;
 export type VisitStatus = (typeof VISIT_STATUS)[keyof typeof VISIT_STATUS];
@@ -64,8 +65,9 @@ export const VISIT_STATUS_LABEL: Record<string, string> = {
   PENDING_REVIEW: "Menunggu Review",
   PENDING_CONFIRM: "Menunggu Konfirmasi",
   APPROVED: "Diterima",
-  REJECTED: "Ditolak",
+  CARD_ISSUED: "Kartu Terbit",
   CHECKED_IN: "Di Dalam",
+  REJECTED: "Ditolak",
   CHECKED_OUT: "Selesai",
   EXPIRED: "Kedaluwarsa",
 };

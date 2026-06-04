@@ -14,9 +14,10 @@ export default async function ScanPage() {
         ← Antrian
       </Link>
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Scan QR Tamu</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Gate Scan</h1>
         <p className="text-sm text-slate-500">
-          Arahkan kamera ke QR di HP tamu untuk membuka kunjungannya.
+          Scan barcode tamu untuk check-in (masuk) atau check-out (keluar) —
+          otomatis sesuai status.
         </p>
       </div>
       <Scanner />

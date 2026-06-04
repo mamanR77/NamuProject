@@ -61,6 +61,7 @@ async function main() {
       username: "andi",
       passwordHash,
       role: "HOST",
+      nik: "3275010101900001",
       waNumber: "6281200000001",
       departmentId: departments["Manufacturing"],
     },

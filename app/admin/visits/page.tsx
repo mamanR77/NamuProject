@@ -11,6 +11,7 @@ const FILTERS = [
   { key: VISIT_STATUS.PENDING_REVIEW, label: "Menunggu Review" },
   { key: VISIT_STATUS.PENDING_CONFIRM, label: "Menunggu Konfirmasi" },
   { key: VISIT_STATUS.APPROVED, label: "Diterima" },
+  { key: VISIT_STATUS.CARD_ISSUED, label: "Kartu Terbit" },
   { key: VISIT_STATUS.CHECKED_IN, label: "Di Dalam" },
   { key: VISIT_STATUS.CHECKED_OUT, label: "Selesai" },
   { key: VISIT_STATUS.REJECTED, label: "Ditolak" },

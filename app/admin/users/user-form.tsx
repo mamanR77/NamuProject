@@ -95,6 +95,22 @@ export function CreateUserForm({ departments }: { departments: DeptOption[] }) {
 
       <div>
         <label className="text-sm font-medium text-slate-700">
+          NIK Karyawan{" "}
+          <span className="text-slate-400">(wajib untuk penerima tamu/Host)</span>
+        </label>
+        <input
+          name="nik"
+          inputMode="numeric"
+          className={inputClass}
+          placeholder="Nomor Induk Karyawan"
+        />
+        {state.fieldErrors?.nik && (
+          <p className="mt-1 text-xs text-rose-600">{state.fieldErrors.nik}</p>
+        )}
+      </div>
+
+      <div>
+        <label className="text-sm font-medium text-slate-700">
           Nomor WhatsApp <span className="text-slate-400">(opsional)</span>
         </label>
         <input

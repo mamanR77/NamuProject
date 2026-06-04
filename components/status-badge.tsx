@@ -13,6 +13,10 @@ const MAP: Record<string, { label: string; cls: string }> = {
     label: "Diterima",
     cls: "bg-emerald-50 text-emerald-700 ring-emerald-200",
   },
+  [VISIT_STATUS.CARD_ISSUED]: {
+    label: "Kartu Terbit",
+    cls: "bg-indigo-50 text-indigo-700 ring-indigo-200",
+  },
   [VISIT_STATUS.REJECTED]: {
     label: "Ditolak",
     cls: "bg-rose-50 text-rose-700 ring-rose-200",

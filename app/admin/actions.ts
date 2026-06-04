@@ -34,6 +34,7 @@ export async function createUserAction(
   const username = String(formData.get("username") ?? "").trim().toLowerCase();
   const password = String(formData.get("password") ?? "");
   const role = String(formData.get("role") ?? "") as Role;
+  const nik = String(formData.get("nik") ?? "").trim();
   const waNumber = String(formData.get("waNumber") ?? "").trim();
   const departmentId = String(formData.get("departmentId") ?? "").trim();
 
@@ -45,10 +46,16 @@ export async function createUserAction(
   if (!password || password.length < 6)
     fieldErrors.password = "Password minimal 6 karakter";
   if (!VALID_ROLES.includes(role)) fieldErrors.role = "Role tidak valid";
+  // NIK wajib untuk HOST (penerima tamu) — kunci validasi konfirmasi selesai.
+  if (role === ROLES.HOST && !nik) fieldErrors.nik = "NIK wajib untuk penerima tamu";
   if (Object.keys(fieldErrors).length > 0) return { fieldErrors };
 
   const existing = await prisma.user.findUnique({ where: { username } });
   if (existing) return { error: "Username sudah terdaftar." };
+  if (nik) {
+    const dup = await prisma.user.findUnique({ where: { nik } });
+    if (dup) return { fieldErrors: { nik: "NIK sudah terdaftar." } };
+  }
 
   await prisma.user.create({
     data: {
@@ -56,6 +63,7 @@ export async function createUserAction(
       username,
       passwordHash: await hashPassword(password),
       role,
+      nik: nik || null,
       waNumber: waNumber || null,
       departmentId: departmentId || null,
     },
