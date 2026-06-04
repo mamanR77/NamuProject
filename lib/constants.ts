@@ -32,6 +32,22 @@ export const LOADING_TYPE_LABEL: Record<string, string> = {
   UNLOADING: "Unloading (bongkar)",
 };
 
+/// Pilihan Tujuan Kedatangan untuk Kunjungan Umum. "Others" => isi manual.
+export const VISIT_PURPOSES = [
+  "Meeting",
+  "Audit",
+  "Site Visit",
+  "Training",
+  "Interview",
+  "Vendor / Supplier Visit",
+  "Maintenance / Service",
+  "Contractor Work",
+  "Delivery / Collection",
+  "Government / Regulatory Visit",
+  "Others",
+] as const;
+export const PURPOSE_OTHERS = "Others";
+
 export const VISIT_STATUS = {
   PENDING: "PENDING", // tamu sudah daftar, menunggu approval host
   APPROVED: "APPROVED", // disetujui host, belum masuk

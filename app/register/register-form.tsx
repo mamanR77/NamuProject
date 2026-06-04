@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { registerVisitAction, type RegisterState } from "./actions";
+import { VISIT_PURPOSES, PURPOSE_OTHERS } from "@/lib/constants";
 
 export type HostOption = {
   id: string;
@@ -22,6 +23,7 @@ export function RegisterForm({ hosts }: { hosts: HostOption[] }) {
     registerVisitAction,
     {}
   );
+  const [purpose, setPurpose] = useState("");
 
   return (
     <form action={formAction} className="space-y-4">
@@ -30,6 +32,38 @@ export function RegisterForm({ hosts }: { hosts: HostOption[] }) {
           {state.error}
         </div>
       )}
+
+      {/* Tujuan Kedatangan — field pertama */}
+      <div>
+        <label className="text-sm font-medium text-slate-700">
+          Tujuan Kedatangan <span className="text-rose-500">*</span>
+        </label>
+        <select
+          name="purposeCategory"
+          className={inputClass}
+          value={purpose}
+          onChange={(e) => setPurpose(e.target.value)}
+        >
+          <option value="" disabled>
+            — Pilih tujuan kedatangan —
+          </option>
+          {VISIT_PURPOSES.map((p) => (
+            <option key={p} value={p}>
+              {p}
+            </option>
+          ))}
+        </select>
+
+        {purpose === PURPOSE_OTHERS && (
+          <input
+            name="purposeOther"
+            className={`${inputClass} mt-2`}
+            placeholder="Tuliskan tujuan kedatangan Anda"
+            autoFocus
+          />
+        )}
+        <FieldError msg={state.fieldErrors?.purpose} />
+      </div>
 
       <div>
         <label className="text-sm font-medium text-slate-700">
@@ -83,19 +117,6 @@ export function RegisterForm({ hosts }: { hosts: HostOption[] }) {
           ))}
         </select>
         <FieldError msg={state.fieldErrors?.hostId} />
-      </div>
-
-      <div>
-        <label className="text-sm font-medium text-slate-700">
-          Tujuan Kunjungan <span className="text-rose-500">*</span>
-        </label>
-        <textarea
-          name="purpose"
-          rows={3}
-          className={inputClass}
-          placeholder="Mis. Meeting, pengiriman barang, wawancara..."
-        />
-        <FieldError msg={state.fieldErrors?.purpose} />
       </div>
 
       <button
