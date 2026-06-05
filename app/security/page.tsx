@@ -95,8 +95,13 @@ export default async function SecurityDashboard() {
                       className="block rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition hover:border-slate-300 hover:shadow"
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <span className="truncate font-semibold text-slate-900">
-                          {v.visitor.fullName}
+                        <span className="flex min-w-0 items-center gap-1.5">
+                          <span className="inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded bg-slate-900 px-1 text-[10px] font-bold text-white">
+                            {v.queueNo ?? "-"}
+                          </span>
+                          <span className="truncate font-semibold text-slate-900">
+                            {v.visitor.fullName}
+                          </span>
                         </span>
                         <span className="shrink-0 text-xs text-slate-400">
                           {formatTime(v.createdAt)}

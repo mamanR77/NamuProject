@@ -80,6 +80,7 @@ model Visit {
   safetyAgreed  Boolean        @default(false) // komitmen safety & compliance
   purpose       String
   status        String         @default("PENDING_REVIEW")
+  queueNo       Int? // nomor antrian harian (urut kedatangan/daftar pada hari itu)
   cardNo        String? // Nomor Kartu Tamu (Visitor Card), diisi Security saat check-in
   qrToken       String         @unique @default(cuid()) // token untuk badge & scan check-in/out
   reviewedAt    DateTime? // saat Security menyetujui review

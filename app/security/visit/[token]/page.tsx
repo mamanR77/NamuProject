@@ -87,6 +87,7 @@ export default async function SecurityVisitPage({
         </div>
 
         <dl className="mt-4 divide-y divide-slate-100">
+          <Row label="No. Antrian" value={visit.queueNo ? `#${visit.queueNo}` : "-"} />
           <Row
             label="Jenis"
             value={VISIT_TYPE_LABEL[visit.visitType] ?? visit.visitType}

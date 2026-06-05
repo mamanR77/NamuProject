@@ -88,10 +88,16 @@ export async function registerVisitAction(
     purposeCategory === PURPOSE_OTHERS ? purposeOther : purposeCategory;
   const hasVehicle = vehicleType === "CAR" || vehicleType === "MOTORCYCLE";
 
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+  const queueNo =
+    (await prisma.visit.count({ where: { createdAt: { gte: startOfDay } } })) + 1;
+
   const visit = await prisma.visit.create({
     data: {
       visitType: "GENERAL",
       status: VISIT_STATUS.PENDING_REVIEW,
+      queueNo,
       purpose,
       detailPurpose: detailPurpose || null,
       hostName,

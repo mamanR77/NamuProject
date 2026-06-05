@@ -39,6 +39,11 @@ export async function registerLoadingAction(
   const purpose =
     loadingType === LOADING_TYPE.LOADING ? "Loading barang" : "Unloading barang";
 
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+  const queueNo =
+    (await prisma.visit.count({ where: { createdAt: { gte: startOfDay } } })) + 1;
+
   const visit = await prisma.visit.create({
     data: {
       visitType: VISIT_TYPE.LOADING,
@@ -47,6 +52,7 @@ export async function registerLoadingAction(
       docNumber: docNumber || null,
       purpose,
       status: VISIT_STATUS.PENDING_REVIEW,
+      queueNo,
       visitor: {
         create: {
           fullName,

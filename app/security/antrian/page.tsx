@@ -133,6 +133,9 @@ export default async function AntrianPage({
                 >
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
+                      <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-slate-900 px-1.5 text-xs font-bold text-white">
+                        {v.queueNo ?? "-"}
+                      </span>
                       <Link
                         href={`/security/visit/${v.qrToken}`}
                         className="font-semibold text-slate-900 hover:underline"

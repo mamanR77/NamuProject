@@ -209,6 +209,14 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — Nomor antrian harian + konfirmasi edit/hapus
+- **Konfirmasi edit/hapus**: komponen `components/confirm-submit.tsx` (dialog sebelum submit);
+  dipasang di Hapus Karyawan/Pengguna, Edit Karyawan, Ganti Password, Koreksi Host (Security).
+- **Nomor antrian harian**: `Visit.queueNo` (migrasi `add_queue_no`). Diisi saat registrasi
+  (umum & loading) = jumlah visit yang dibuat hari itu + 1 (reset alami tiap hari). Backfill
+  data lama. Tampil di Antrian (chip nomor), kartu Dashboard, & halaman fokus ("No. Antrian").
+- Build/typecheck lolos; smoke test — chip nomor tampil di antrian. Commit lokal (belum push).
+
 ### 2026-06-05 (lanjutan) — Karyawan: tampilan tabel + edit
 - **Permintaan user**: daftar Karyawan jadi **tabel** (NIK, Nama, Jabatan, Department, Entitas) +
   fitur **Edit**.
