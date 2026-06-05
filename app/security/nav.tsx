@@ -7,6 +7,7 @@ const LINKS = [
   { href: "/security", label: "Dashboard", icon: "📊", exact: true },
   { href: "/security/review", label: "Review", icon: "🔍" },
   { href: "/security/antrian", label: "Antrian", icon: "📋" },
+  { href: "/security/monitoring", label: "Monitoring", icon: "⏱️" },
   { href: "/security/scan", label: "Gate Scan", icon: "📷" },
 ];
 

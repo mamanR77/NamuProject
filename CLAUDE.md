@@ -209,6 +209,16 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — Menu Monitoring (durasi kunjungan)
+- **Permintaan user**: menu Monitoring di sidebar Security — ukur **durasi check-in → check-out**;
+  bila belum checkout, **durasi berjalan** (live).
+- **`components/live-duration.tsx`** (client): durasi total bila ada checkOutAt; bila belum,
+  berjalan tiap detik (format `Xj Ym Zd`, label "berjalan", warna emerald).
+- **`/security/monitoring`**: tabel (No, Nama, Status, Check-in, Check-out, Durasi) untuk visit yang
+  sudah check-in; filter Semua/Di Dalam/Selesai; statistik "Sedang di Dalam"; auto-refresh.
+  Menu **Monitoring** (⏱️) ditambah ke sidebar Security.
+- Build/typecheck lolos; smoke test — durasi "berjalan" tampil untuk CHECKED_IN. Commit lokal (belum push).
+
 ### 2026-06-05 (lanjutan) — Review: kolom pencarian karyawan (combobox)
 - **Permintaan user**: ganti dua dropdown (Host & Department) jadi **1 kolom pencarian** karyawan
   (ketik/scroll) menampilkan Nama · NIK · Department dari database Karyawan; pilih = host+department valid.
