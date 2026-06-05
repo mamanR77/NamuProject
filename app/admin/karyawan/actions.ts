@@ -155,6 +155,43 @@ export async function addEmployeeAction(
   return { ok: true };
 }
 
+/// Edit data karyawan (host).
+export async function updateEmployeeAction(
+  _prev: EmpFormState,
+  formData: FormData
+): Promise<EmpFormState> {
+  await requireAdmin();
+  const userId = String(formData.get("userId") ?? "").trim();
+  const nik = String(formData.get("nik") ?? "").trim();
+  const name = String(formData.get("name") ?? "").trim();
+  const jabatan = String(formData.get("jabatan") ?? "").trim();
+  const departmentId = String(formData.get("departmentId") ?? "").trim();
+  const entitas = String(formData.get("entitas") ?? "").trim();
+
+  if (!userId) return { error: "Karyawan tidak valid." };
+  const fe: Record<string, string> = {};
+  if (!nik) fe.nik = "NIK wajib diisi";
+  if (!name) fe.name = "Nama wajib diisi";
+  if (Object.keys(fe).length) return { fieldErrors: fe };
+
+  const dup = await prisma.user.findUnique({ where: { nik } });
+  if (dup && dup.id !== userId)
+    return { fieldErrors: { nik: "NIK sudah dipakai karyawan lain." } };
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      nik,
+      name,
+      jabatan: jabatan || null,
+      entitas: entitas || null,
+      departmentId: departmentId || null,
+    },
+  });
+  revalidatePath("/admin/karyawan");
+  return { ok: true };
+}
+
 export async function deleteEmployeeAction(formData: FormData) {
   await requireAdmin();
   const id = String(formData.get("userId") ?? "");

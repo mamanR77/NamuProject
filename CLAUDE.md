@@ -209,6 +209,14 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — Karyawan: tampilan tabel + edit
+- **Permintaan user**: daftar Karyawan jadi **tabel** (NIK, Nama, Jabatan, Department, Entitas) +
+  fitur **Edit**.
+- `/admin/karyawan`: daftar diubah jadi `<table>` (kolom + kolom Aksi: Edit/Hapus, overflow-x-auto).
+- **Edit**: `updateEmployeeAction` (validasi + cek NIK unik selain diri) + `EditEmployeeButton`
+  (tombol Edit → modal pre-filled NIK/Nama/Jabatan/Department/Entitas → simpan).
+- Build/typecheck lolos; smoke test — header tabel 6 kolom + tombol Edit + data tampil. Commit lokal (belum push).
+
 ### 2026-06-05 (lanjutan) — Karyawan: tombol+modal tambah & field Entitas
 - **Permintaan user**: "Tambah Karyawan" jadi **tombol → modal**; tambah field **Entitas**
   (GMI/GID/GAP/TG).
