@@ -209,6 +209,15 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — Karyawan: tombol+modal tambah & field Entitas
+- **Permintaan user**: "Tambah Karyawan" jadi **tombol → modal**; tambah field **Entitas**
+  (GMI/GID/GAP/TG).
+- **Schema**: `User.entitas` (migrasi `add_user_entitas`). Konstanta `ENTITAS`.
+- **AddEmployeeButton** (client): tombol "+ Tambah Karyawan" → modal form (NIK, Nama, Jabatan,
+  Department, **Entitas**); tutup otomatis saat sukses. Import Excel & tambah manual ikut Entitas
+  (kolom `Entitas`). Daftar menampilkan badge entitas.
+- Build/typecheck lolos; smoke test — tombol, hint Entitas, badge GMI tampil. Commit lokal (belum push).
+
 ### 2026-06-05 (lanjutan) — Pengguna fokus staff + ganti password
 - **Permintaan user**: menu Pengguna fokus akun **Super Admin & Security**, + fitur **ganti password**.
 - `/admin/users`: daftar difilter role **ADMIN/SECURITY** (host kini di menu Karyawan); form tambah

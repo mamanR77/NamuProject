@@ -25,6 +25,9 @@ export function ImportForm() {
         </span>{" "}
         <span className="rounded bg-slate-100 px-1 font-mono text-xs">
           Jabatan
+        </span>{" "}
+        <span className="rounded bg-slate-100 px-1 font-mono text-xs">
+          Entitas
         </span>
         . Baris dengan NIK yang sama akan diperbarui.
       </p>

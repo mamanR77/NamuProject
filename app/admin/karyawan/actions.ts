@@ -57,6 +57,7 @@ export async function importEmployeesAction(
     const name = pick(row, ["nama", "name"]);
     const deptName = pick(row, ["department", "departemen", "dept", "divisi"]);
     const jabatan = pick(row, ["jabatan", "position", "title"]);
+    const entitas = pick(row, ["entitas", "entity"]).toUpperCase();
     if (!nik || !name) {
       skipped++;
       continue;
@@ -82,6 +83,7 @@ export async function importEmployeesAction(
           data: {
             name,
             jabatan: jabatan || null,
+            entitas: entitas || null,
             departmentId: deptId,
             role: ROLES.HOST,
           },
@@ -96,6 +98,7 @@ export async function importEmployeesAction(
             role: ROLES.HOST,
             nik,
             jabatan: jabatan || null,
+            entitas: entitas || null,
             departmentId: deptId,
           },
         });
@@ -126,6 +129,7 @@ export async function addEmployeeAction(
   const name = String(formData.get("name") ?? "").trim();
   const jabatan = String(formData.get("jabatan") ?? "").trim();
   const departmentId = String(formData.get("departmentId") ?? "").trim();
+  const entitas = String(formData.get("entitas") ?? "").trim();
 
   const fe: Record<string, string> = {};
   if (!nik) fe.nik = "NIK wajib diisi";
@@ -143,6 +147,7 @@ export async function addEmployeeAction(
       role: ROLES.HOST,
       nik,
       jabatan: jabatan || null,
+      entitas: entitas || null,
       departmentId: departmentId || null,
     },
   });

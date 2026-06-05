@@ -101,6 +101,11 @@ export const NOTIFICATION_STATUS = {
 export type NotificationStatus =
   (typeof NOTIFICATION_STATUS)[keyof typeof NOTIFICATION_STATUS];
 
+// ---- Karyawan ----
+
+export const ENTITAS = ["GMI", "GID", "GAP", "TG"] as const;
+export const ENTITAS_VALUES = ENTITAS as readonly string[];
+
 // ---- Form Kunjungan Umum ----
 
 export const ID_TYPES = [
