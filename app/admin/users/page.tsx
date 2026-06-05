@@ -1,26 +1,27 @@
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
+import { ROLES } from "@/lib/constants";
 import { deleteUserAction } from "../actions";
 import { CreateUserForm, type DeptOption } from "./user-form";
+import { ChangePassword } from "./change-password";
 
 export const dynamic = "force-dynamic";
 
 const ROLE_LABEL: Record<string, string> = {
   ADMIN: "Super Admin",
   SECURITY: "Security",
-  HOST: "Host",
 };
 
 const ROLE_CLS: Record<string, string> = {
   ADMIN: "bg-slate-900 text-white",
   SECURITY: "bg-sky-100 text-sky-700",
-  HOST: "bg-emerald-100 text-emerald-700",
 };
 
 export default async function UsersPage() {
   const me = await getCurrentUser();
   const [users, departments] = await Promise.all([
     prisma.user.findMany({
+      where: { role: { in: [ROLES.ADMIN, ROLES.SECURITY] } },
       orderBy: [{ role: "asc" }, { name: "asc" }],
       include: { department: true, _count: { select: { hostedVisits: true } } },
     }),
@@ -37,7 +38,8 @@ export default async function UsersPage() {
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Pengguna</h1>
         <p className="text-sm text-slate-500">
-          Kelola akun staff: Super Admin, Security, dan Host.
+          Kelola akun staff: Super Admin & Security. (Karyawan/host dikelola di
+          menu Karyawan.)
         </p>
       </div>
 
@@ -66,22 +68,23 @@ export default async function UsersPage() {
                     </div>
                     <div className="truncate text-xs text-slate-500">
                       @{u.username}
-                      {u.nik ? ` · NIK ${u.nik}` : ""}
                       {u.department ? ` · ${u.department.name}` : ""}
-                      {u.waNumber ? ` · WA ${u.waNumber}` : ""}
                     </div>
                   </div>
-                  {me?.id !== u.id && u._count.hostedVisits === 0 && (
-                    <form action={deleteUserAction}>
-                      <input type="hidden" name="userId" value={u.id} />
-                      <button
-                        type="submit"
-                        className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50"
-                      >
-                        Hapus
-                      </button>
-                    </form>
-                  )}
+                  <div className="flex shrink-0 items-center gap-2">
+                    <ChangePassword userId={u.id} />
+                    {me?.id !== u.id && u._count.hostedVisits === 0 && (
+                      <form action={deleteUserAction}>
+                        <input type="hidden" name="userId" value={u.id} />
+                        <button
+                          type="submit"
+                          className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50"
+                        >
+                          Hapus
+                        </button>
+                      </form>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

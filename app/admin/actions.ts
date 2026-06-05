@@ -73,6 +73,26 @@ export async function createUserAction(
   return { ok: true };
 }
 
+export type PasswordState = { ok?: boolean; error?: string };
+
+/// Ganti password akun staff (Super Admin / Security).
+export async function changePasswordAction(
+  _prev: PasswordState,
+  formData: FormData
+): Promise<PasswordState> {
+  await requireAdmin();
+  const userId = String(formData.get("userId") ?? "");
+  const password = String(formData.get("password") ?? "");
+  if (!userId) return { error: "Akun tidak valid." };
+  if (password.length < 6) return { error: "Password minimal 6 karakter." };
+  await prisma.user.update({
+    where: { id: userId },
+    data: { passwordHash: await hashPassword(password) },
+  });
+  revalidatePath("/admin/users");
+  return { ok: true };
+}
+
 export async function deleteUserAction(formData: FormData) {
   const me = await requireAdmin();
   const id = String(formData.get("userId") ?? "");

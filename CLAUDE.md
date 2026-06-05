@@ -209,6 +209,14 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — Pengguna fokus staff + ganti password
+- **Permintaan user**: menu Pengguna fokus akun **Super Admin & Security**, + fitur **ganti password**.
+- `/admin/users`: daftar difilter role **ADMIN/SECURITY** (host kini di menu Karyawan); form tambah
+  hanya opsi Security/Super Admin (hapus opsi Host & field NIK). Tampilan baris dibersihkan.
+- **Ganti password**: `changePasswordAction` + komponen `ChangePassword` (tombol → input password
+  baru → simpan, min 6 karakter). Build/typecheck lolos; smoke test — hanya staff tampil + tombol
+  ganti password. Commit lokal (belum push).
+
 ### 2026-06-05 (lanjutan) — Menu Karyawan (Super Admin) + import Excel
 - **Permintaan user**: menu **Karyawan** di sidebar Super Admin = database karyawan calon host;
   fitur **import Excel** (kolom NIK, Nama, Department, Jabatan).

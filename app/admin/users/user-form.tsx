@@ -10,7 +10,6 @@ const inputClass =
   "mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-100";
 
 const ROLE_OPTIONS = [
-  { value: ROLES.HOST, label: "Host (karyawan dikunjungi)" },
   { value: ROLES.SECURITY, label: "Security / Resepsionis" },
   { value: ROLES.ADMIN, label: "Super Admin" },
 ];
@@ -81,7 +80,7 @@ export function CreateUserForm({ departments }: { departments: DeptOption[] }) {
 
       <div>
         <label className="text-sm font-medium text-slate-700">Role</label>
-        <select name="role" className={inputClass} defaultValue={ROLES.HOST}>
+        <select name="role" className={inputClass} defaultValue={ROLES.SECURITY}>
           {ROLE_OPTIONS.map((r) => (
             <option key={r.value} value={r.value}>
               {r.label}
@@ -91,33 +90,6 @@ export function CreateUserForm({ departments }: { departments: DeptOption[] }) {
         {state.fieldErrors?.role && (
           <p className="mt-1 text-xs text-rose-600">{state.fieldErrors.role}</p>
         )}
-      </div>
-
-      <div>
-        <label className="text-sm font-medium text-slate-700">
-          NIK Karyawan{" "}
-          <span className="text-slate-400">(wajib untuk penerima tamu/Host)</span>
-        </label>
-        <input
-          name="nik"
-          inputMode="numeric"
-          className={inputClass}
-          placeholder="Nomor Induk Karyawan"
-        />
-        {state.fieldErrors?.nik && (
-          <p className="mt-1 text-xs text-rose-600">{state.fieldErrors.nik}</p>
-        )}
-      </div>
-
-      <div>
-        <label className="text-sm font-medium text-slate-700">
-          Nomor WhatsApp <span className="text-slate-400">(opsional)</span>
-        </label>
-        <input
-          name="waNumber"
-          className={inputClass}
-          placeholder="6281200000000"
-        />
       </div>
 
       <div>
