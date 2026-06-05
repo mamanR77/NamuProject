@@ -13,6 +13,7 @@ import {
   VEHICLE_TYPE_LABEL,
 } from "@/lib/constants";
 import { StatusBadge, TypeBadge } from "@/components/status-badge";
+import { PhotoZoom } from "@/components/photo-zoom";
 import { ConfirmSubmit } from "@/components/confirm-submit";
 import { formatDateTime } from "@/lib/format";
 import {
@@ -189,8 +190,7 @@ export default async function SecurityVisitPage({
           <div className="flex gap-4">
             {visit.visitor.idPhoto && (
               <figure className="text-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <PhotoZoom
                   src={visit.visitor.idPhoto}
                   alt="Foto identitas"
                   className="h-32 w-32 rounded-lg border border-slate-200 object-cover"
@@ -202,8 +202,7 @@ export default async function SecurityVisitPage({
             )}
             {visit.visitor.selfiePhoto && (
               <figure className="text-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <PhotoZoom
                   src={visit.visitor.selfiePhoto}
                   alt="Swafoto"
                   className="h-32 w-32 rounded-lg border border-slate-200 object-cover"

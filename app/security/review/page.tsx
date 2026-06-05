@@ -9,6 +9,7 @@ import {
   LOADING_TYPE_LABEL,
 } from "@/lib/constants";
 import { TypeBadge } from "@/components/status-badge";
+import { PhotoZoom } from "@/components/photo-zoom";
 import { ConfirmSubmit } from "@/components/confirm-submit";
 import { AutoRefresh } from "@/components/auto-refresh";
 import { formatDateTime } from "@/lib/format";
@@ -90,8 +91,7 @@ export default async function ReviewPage() {
                     <div className="flex gap-3">
                       <figure className="text-center">
                         {v.visitor.idPhoto ? (
-                          /* eslint-disable-next-line @next/next/no-img-element */
-                          <img
+                          <PhotoZoom
                             src={v.visitor.idPhoto}
                             alt="Foto identitas"
                             className="h-40 w-40 rounded-lg border border-slate-200 object-cover"
@@ -107,8 +107,7 @@ export default async function ReviewPage() {
                       </figure>
                       {v.visitor.selfiePhoto && (
                         <figure className="text-center">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
+                          <PhotoZoom
                             src={v.visitor.selfiePhoto}
                             alt="Swafoto"
                             className="h-40 w-40 rounded-lg border border-slate-200 object-cover"
