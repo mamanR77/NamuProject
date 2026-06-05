@@ -55,7 +55,10 @@ export default async function SecurityVisitPage({
 
   return (
     <div className="mx-auto max-w-lg space-y-5">
-      <Link href="/security" className="text-sm text-slate-500 hover:underline">
+      <Link
+        href="/security/antrian"
+        className="text-sm text-slate-500 hover:underline"
+      >
         ← Antrian
       </Link>
 

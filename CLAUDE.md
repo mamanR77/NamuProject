@@ -209,6 +209,21 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — UI Security: sidebar + Dashboard papan progres
+- **Permintaan user**: rapikan UI `/security` — **menu sidebar**, halaman pertama = **Dashboard**
+  berisi **papan progres** (kolom per tahap, **count di atas** tiap kolom, nama tamu berpindah
+  kolom otomatis saat status maju).
+- **Layout sidebar** (`app/security/layout.tsx` + `nav.tsx`): menu Dashboard · Antrian · Gate Scan
+  (+ link ke Admin bila role ADMIN).
+- **Dashboard** (`/security`): papan 5 kolom (Menunggu Review → Menunggu Konfirmasi → Diterima →
+  Kartu Terbit → Di Dalam), tiap kolom ada badge jumlah; kartu tamu klik → halaman fokus.
+  Statistik "Di Dalam" & "Hari Ini". **Auto-refresh** (`components/auto-refresh.tsx`, generic).
+- **Antrian** dipindah ke `/security/antrian` (list + tombol aksi seperti sebelumnya, href filter
+  disesuaikan). Tautan balik halaman fokus → `/security/antrian`.
+- **Verifikasi**: build/typecheck lolos; smoke test — dashboard menampilkan nama tamu di kolom
+  sesuai tahap (Budi/Citra/Dewi/Eko di 4 tahap berbeda), /security/antrian 200.
+  (Ditambah beberapa visit contoh untuk demo papan.) Commit lokal (belum push).
+
 ### 2026-06-05 (lanjutan) — Scanner pakai webcam (jsQR), ganti BarcodeDetector
 - **Konteks**: BarcodeDetector tidak tersedia di Chrome/Edge Windows desktop → webcam laptop
   tak terpakai. Diganti ke **`jsqr`** (decode frame webcam, jalan di semua browser).

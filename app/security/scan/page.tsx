@@ -11,7 +11,7 @@ export default async function ScanPage() {
   return (
     <div className="mx-auto max-w-md space-y-4">
       <Link href="/security" className="text-sm text-slate-500 hover:underline">
-        ← Antrian
+        ← Dashboard
       </Link>
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Gate Scan</h1>
