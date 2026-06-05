@@ -4,6 +4,7 @@ import { ROLES } from "@/lib/constants";
 import { deleteUserAction } from "../actions";
 import { CreateUserForm, type DeptOption } from "./user-form";
 import { ChangePassword } from "./change-password";
+import { ConfirmSubmit } from "@/components/confirm-submit";
 
 export const dynamic = "force-dynamic";
 
@@ -76,12 +77,12 @@ export default async function UsersPage() {
                     {me?.id !== u.id && u._count.hostedVisits === 0 && (
                       <form action={deleteUserAction}>
                         <input type="hidden" name="userId" value={u.id} />
-                        <button
-                          type="submit"
+                        <ConfirmSubmit
+                          message={`Yakin hapus akun "${u.name}"?`}
                           className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50"
                         >
                           Hapus
-                        </button>
+                        </ConfirmSubmit>
                       </form>
                     )}
                   </div>

@@ -4,6 +4,7 @@ import { ImportForm } from "./import-form";
 import { AddEmployeeButton, type DeptOption } from "./add-form";
 import { EditEmployeeButton } from "./edit-form";
 import { deleteEmployeeAction } from "./actions";
+import { ConfirmSubmit } from "@/components/confirm-submit";
 
 export const dynamic = "force-dynamic";
 
@@ -98,12 +99,12 @@ export default async function KaryawanPage() {
                         />
                         <form action={deleteEmployeeAction}>
                           <input type="hidden" name="userId" value={u.id} />
-                          <button
-                            type="submit"
+                          <ConfirmSubmit
+                            message={`Yakin hapus karyawan "${u.name}"?`}
                             className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50"
                           >
                             Hapus
-                          </button>
+                          </ConfirmSubmit>
                         </form>
                       </div>
                     </td>

@@ -153,6 +153,10 @@ export function EditEmployeeButton({
                 <button
                   type="submit"
                   disabled={pending}
+                  onClick={(e) => {
+                    if (!window.confirm("Simpan perubahan data karyawan ini?"))
+                      e.preventDefault();
+                  }}
                   className="flex-1 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-60"
                 >
                   {pending ? "Menyimpan…" : "Simpan"}

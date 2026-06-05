@@ -34,6 +34,9 @@ export function ChangePassword({ userId }: { userId: string }) {
       <button
         type="submit"
         disabled={pending}
+        onClick={(e) => {
+          if (!window.confirm("Ganti password akun ini?")) e.preventDefault();
+        }}
         className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800 disabled:opacity-60"
       >
         {pending ? "…" : "Simpan"}

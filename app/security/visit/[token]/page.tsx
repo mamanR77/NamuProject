@@ -13,6 +13,7 @@ import {
   VEHICLE_TYPE_LABEL,
 } from "@/lib/constants";
 import { StatusBadge, TypeBadge } from "@/components/status-badge";
+import { ConfirmSubmit } from "@/components/confirm-submit";
 import { formatDateTime } from "@/lib/format";
 import {
   reviewOkAction,
@@ -244,12 +245,12 @@ export default async function SecurityVisitPage({
                   </option>
                 ))}
               </select>
-              <button
-                type="submit"
+              <ConfirmSubmit
+                message="Simpan koreksi host untuk kunjungan ini?"
                 className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
               >
                 Simpan
-              </button>
+              </ConfirmSubmit>
             </form>
           </div>
         )}
