@@ -196,8 +196,9 @@ export async function deleteEmployeeAction(formData: FormData) {
   await requireAdmin();
   const id = String(formData.get("userId") ?? "");
   if (!id) return;
-  const visits = await prisma.visit.count({ where: { hostId: id } });
-  if (visits > 0) return; // jangan hapus jika masih dipakai kunjungan
+  // Putus tautan ke kunjungan lama (riwayat tetap aman: nama PIC & data konfirmasi
+  // sudah tersimpan di record kunjungan), lalu hapus.
+  await prisma.visit.updateMany({ where: { hostId: id }, data: { hostId: null } });
   await prisma.notification.deleteMany({ where: { userId: id } });
   await prisma.user.delete({ where: { id } });
   revalidatePath("/admin/karyawan");

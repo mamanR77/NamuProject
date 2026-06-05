@@ -96,17 +96,15 @@ export default async function KaryawanPage() {
                             entitas: u.entitas ?? "",
                           }}
                         />
-                        {u._count.hostedVisits === 0 && (
-                          <form action={deleteEmployeeAction}>
-                            <input type="hidden" name="userId" value={u.id} />
-                            <button
-                              type="submit"
-                              className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50"
-                            >
-                              Hapus
-                            </button>
-                          </form>
-                        )}
+                        <form action={deleteEmployeeAction}>
+                          <input type="hidden" name="userId" value={u.id} />
+                          <button
+                            type="submit"
+                            className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50"
+                          >
+                            Hapus
+                          </button>
+                        </form>
                       </div>
                     </td>
                   </tr>
