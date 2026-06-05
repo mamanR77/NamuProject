@@ -56,6 +56,23 @@ export async function assignHostAction(formData: FormData) {
   revalidate();
 }
 
+/// Security mengoreksi Department tujuan kunjungan.
+export async function updateVisitDepartmentAction(formData: FormData) {
+  await requireRole(ALLOWED);
+  const id = visitId(formData);
+  const departmentId = String(formData.get("departmentId") ?? "").trim();
+  if (!id) return;
+  await prisma.visit.update({
+    where: { id },
+    data: {
+      department: departmentId
+        ? { connect: { id: departmentId } }
+        : { disconnect: true },
+    },
+  });
+  revalidate();
+}
+
 /// Tolak kunjungan (saat review atau konfirmasi).
 export async function rejectAction(formData: FormData) {
   await requireRole(ALLOWED);

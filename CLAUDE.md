@@ -209,6 +209,17 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — Menu Review (Security)
+- **Permintaan user**: menu **Review** khusus di sidebar Security — seluruh data submit tamu +
+  **foto** untuk dicocokkan dengan asli; Security bisa **koreksi Host (dari database Karyawan)**
+  & **Department**, lalu **Review OK / Tolak**.
+- **`/security/review`**: daftar visit status PENDING_REVIEW; tiap kartu tampil foto identitas +
+  swafoto, seluruh data (perusahaan/jabatan/HP/email/identitas/keperluan/kendaraan/PIC ketikan),
+  + form koreksi Host (dropdown karyawan, `assignHostAction`) & Department (`updateVisitDepartmentAction`)
+  + tombol Review OK (`reviewOkAction`) / Tolak (`rejectAction`). Konfirmasi pada koreksi & tolak.
+  Auto-refresh. Menu **Review** ditambah ke sidebar Security.
+- Build/typecheck lolos; smoke test — halaman 200, semua kontrol & foto tampil. Commit lokal (belum push).
+
 ### 2026-06-05 (lanjutan) — Nomor antrian harian + konfirmasi edit/hapus
 - **Konfirmasi edit/hapus**: komponen `components/confirm-submit.tsx` (dialog sebelum submit);
   dipasang di Hapus Karyawan/Pengguna, Edit Karyawan, Ganti Password, Koreksi Host (Security).
