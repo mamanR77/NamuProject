@@ -107,6 +107,13 @@ export default async function VisitStatusPage({
                 className="rounded-lg bg-white p-2 shadow-sm"
               />
               <span className="mt-2 text-xs text-slate-400">{t.badge}</span>
+              <a
+                href={qr}
+                download={`Namu-Badge-${visit.visitor.fullName.replace(/[^a-z0-9]+/gi, "_")}.png`}
+                className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                ⬇ {t.download}
+              </a>
             </div>
           )}
         </div>

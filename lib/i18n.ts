@@ -97,6 +97,7 @@ export interface Dict {
     statusTitle: string;
     detail: string;
     badge: string;
+    download: string;
     back: string;
     typeGeneral: string;
     typeLoading: string;
@@ -209,6 +210,7 @@ const id: Dict = {
     statusTitle: "Status Kunjungan",
     detail: "Detail",
     badge: "Badge Digital Namu",
+    download: "Unduh Badge",
     back: "Kembali ke beranda",
     typeGeneral: "Kunjungan Umum",
     typeLoading: "Loading/Unloading",
@@ -356,6 +358,7 @@ const en: Dict = {
     statusTitle: "Visit Status",
     detail: "Details",
     badge: "Namu Digital Badge",
+    download: "Download Badge",
     back: "Back to home",
     typeGeneral: "General Visit",
     typeLoading: "Loading / Unloading",
@@ -503,6 +506,7 @@ const ja: Dict = {
     statusTitle: "訪問ステータス",
     detail: "詳細",
     badge: "Namu デジタルバッジ",
+    download: "バッジをダウンロード",
     back: "ホームに戻る",
     typeGeneral: "一般訪問",
     typeLoading: "搬入 / 搬出",
