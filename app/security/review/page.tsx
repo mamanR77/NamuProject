@@ -92,7 +92,7 @@ export default async function ReviewPage() {
                 {!isLoading && (
                   <div className="mt-3 flex flex-wrap gap-2">
                     <span className="rounded-lg bg-indigo-50 px-3 py-1.5 text-sm font-semibold text-indigo-700 ring-1 ring-indigo-200">
-                      👤 Dikunjungi: {v.host ? v.host.name : v.hostName ?? "-"}
+                      👤 Tamu untuk: {v.host ? v.host.name : v.hostName ?? "-"}
                     </span>
                     <span className="rounded-lg bg-amber-50 px-3 py-1.5 text-sm font-semibold text-amber-700 ring-1 ring-amber-200">
                       🏢 Department:{" "}
@@ -186,7 +186,6 @@ export default async function ReviewPage() {
                         {v.vehiclePlate && (
                           <Row label="No. Polisi" value={v.vehiclePlate} />
                         )}
-                        <Row label="PIC (input tamu)" value={v.hostName ?? "-"} />
                       </>
                     )}
                   </dl>
