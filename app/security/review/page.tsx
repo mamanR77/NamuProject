@@ -38,7 +38,11 @@ export default async function ReviewPage() {
     prisma.visit.findMany({
       where: { status: VISIT_STATUS.PENDING_REVIEW },
       orderBy: { createdAt: "asc" },
-      include: { visitor: true, host: true, department: true },
+      include: {
+        visitor: true,
+        host: { include: { department: true } },
+        department: true,
+      },
     }),
     prisma.user.findMany({
       where: { role: ROLES.HOST },
@@ -84,6 +88,18 @@ export default async function ReviewPage() {
                     {formatDateTime(v.createdAt)}
                   </span>
                 </div>
+
+                {!isLoading && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <span className="rounded-lg bg-indigo-50 px-3 py-1.5 text-sm font-semibold text-indigo-700 ring-1 ring-indigo-200">
+                      👤 Dikunjungi: {v.host ? v.host.name : v.hostName ?? "-"}
+                    </span>
+                    <span className="rounded-lg bg-amber-50 px-3 py-1.5 text-sm font-semibold text-amber-700 ring-1 ring-amber-200">
+                      🏢 Department:{" "}
+                      {v.host?.department?.name ?? v.department?.name ?? "-"}
+                    </span>
+                  </div>
+                )}
 
                 <div className="mt-4 grid gap-4 md:grid-cols-2">
                   {/* Foto untuk pencocokan */}

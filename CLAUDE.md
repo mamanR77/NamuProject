@@ -209,6 +209,12 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — Review: panel PIC+Department berwarna; foto bisa diperbesar
+- Foto identitas & swafoto **bisa diklik untuk diperbesar** (`components/photo-zoom.tsx`, lightbox);
+  dipakai di Review & halaman fokus Security.
+- Review: panel menonjol berwarna — **Dikunjungi** (nama PIC, indigo) & **Department** (amber);
+  department diambil dari **department host (PIC) yang ditautkan** (fallback ke department pilihan tamu).
+
 ### 2026-06-05 (lanjutan) — Menu Review (Security)
 - **Permintaan user**: menu **Review** khusus di sidebar Security — seluruh data submit tamu +
   **foto** untuk dicocokkan dengan asli; Security bisa **koreksi Host (dari database Karyawan)**
