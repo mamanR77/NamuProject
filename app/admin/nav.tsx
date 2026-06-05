@@ -7,6 +7,7 @@ const LINKS = [
   { href: "/admin", label: "Dashboard", icon: "📊", exact: true },
   { href: "/admin/visits", label: "Kunjungan", icon: "🚪" },
   { href: "/security", label: "Antrian Security", icon: "🛡️" },
+  { href: "/admin/karyawan", label: "Karyawan", icon: "🧑‍💼" },
   { href: "/admin/users", label: "Pengguna", icon: "👥" },
   { href: "/admin/departments", label: "Departemen", icon: "🏢" },
 ];

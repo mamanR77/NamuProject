@@ -209,6 +209,19 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — Menu Karyawan (Super Admin) + import Excel
+- **Permintaan user**: menu **Karyawan** di sidebar Super Admin = database karyawan calon host;
+  fitur **import Excel** (kolom NIK, Nama, Department, Jabatan).
+- **Schema**: `User.jabatan` (migrasi `add_user_jabatan`). Karyawan = `User` role HOST.
+- **Dependency**: `xlsx` (SheetJS) untuk baca .xlsx di server action.
+- **`/admin/karyawan`**: daftar karyawan (NIK/Nama/Jabatan/Department) + **Import Excel**
+  (`importEmployeesAction`: parse → upsert by NIK; header fleksibel; departemen dibuat otomatis
+  bila belum ada; ringkasan created/updated/skipped) + **Tambah Manual** + Hapus.
+  Username karyawan auto `k_<NIK>`, password acak (mereka tidak login).
+- **Sidebar admin** + menu **Karyawan** (🧑‍💼).
+- **Verifikasi**: build/typecheck lolos; smoke test — generate xlsx contoh (3 baris) → parse+upsert
+  berhasil, /admin/karyawan menampilkan data. Commit lokal (belum push).
+
 ### 2026-06-05 (lanjutan) — Form Kunjungan Umum 5 section (data lengkap + foto)
 - **Permintaan user**: form dibagi 5 section + banyak field baru. Keputusan: foto disimpan di DB
   (kompres base64); Host diketik bebas + pilih Department (privasi), **Security koreksi ke
