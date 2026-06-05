@@ -6,6 +6,7 @@ import { generateQrDataUrl } from "@/lib/qr";
 import { getLocale } from "@/lib/locale";
 import { getDict } from "@/lib/i18n";
 import { AutoRefresh } from "./auto-refresh";
+import { RememberVisit } from "./remember-visit";
 
 export const dynamic = "force-dynamic";
 
@@ -78,6 +79,7 @@ export default async function VisitStatusPage({
   return (
     <main className="flex-1 px-5 py-8">
       {isLive && <AutoRefresh seconds={5} />}
+      <RememberVisit token={token} remember={isLive} />
 
       <div className="mx-auto w-full max-w-md space-y-5">
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">

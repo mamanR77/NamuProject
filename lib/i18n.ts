@@ -36,6 +36,7 @@ export interface Dict {
     internalNote: string;
     loginStaff: string;
     vms: string;
+    myVisit: string;
   };
   register: {
     back: string;
@@ -144,6 +145,7 @@ const id: Dict = {
     internalNote: "Sistem internal — hanya dapat diakses dari jaringan perusahaan.",
     loginStaff: "Login Staff",
     vms: "Visitor Management System",
+    myVisit: "Lihat Kunjungan Saya",
   },
   register: {
     back: "← Kembali",
@@ -290,6 +292,7 @@ const en: Dict = {
     internalNote: "Internal system — accessible only from the company network.",
     loginStaff: "Staff Login",
     vms: "Visitor Management System",
+    myVisit: "View My Visit",
   },
   register: {
     back: "← Back",
@@ -436,6 +439,7 @@ const ja: Dict = {
     internalNote: "社内システム — 社内ネットワークからのみアクセス可能です。",
     loginStaff: "スタッフログイン",
     vms: "来訪者管理システム",
+    myVisit: "私の訪問を見る",
   },
   register: {
     back: "← 戻る",

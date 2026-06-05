@@ -3,6 +3,7 @@ import { APP_NAME } from "@/lib/constants";
 import { getLocale } from "@/lib/locale";
 import { getDict } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ResumeVisit } from "./resume-visit";
 
 export const dynamic = "force-dynamic";
 
@@ -36,7 +37,11 @@ export default async function Home() {
 
           <p className="mt-5 text-sm text-slate-600">{t.choose}</p>
 
-          <div className="mt-6 grid gap-4">
+          <div className="mt-6">
+            <ResumeVisit label={t.myVisit} />
+          </div>
+
+          <div className="grid gap-4">
             {/* Kunjungan Umum */}
             <Link
               href="/register"
