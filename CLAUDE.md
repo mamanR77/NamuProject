@@ -209,6 +209,15 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — Scanner pakai webcam (jsQR), ganti BarcodeDetector
+- **Konteks**: BarcodeDetector tidak tersedia di Chrome/Edge Windows desktop → webcam laptop
+  tak terpakai. Diganti ke **`jsqr`** (decode frame webcam, jalan di semua browser).
+- Komponen reusable **`components/qr-scanner.tsx`** (getUserMedia `facingMode: ideal environment`
+  → fallback webcam; loop draw ke canvas → `jsQR`; debounce 2.5s; input manual cadangan).
+- **Gate Scan Security** (`/security/scan`) & **Modul Penerima Tamu** (`/selesai`) di-refactor
+  memakai `QrScanner`. Build lolos; halaman merender `<video>` + input manual.
+- Commit lokal (belum push).
+
 ### 2026-06-05 (lanjutan) — Alur barcode: terbit kartu, scan masuk/keluar, modul penerima tamu
 - **Permintaan user**: setelah Security terbitkan kartu, **barcode tamu aktif**; tamu **scan di pos**
   untuk masuk (jadi "Di Dalam", layar HIJAU); **penerima tamu scan barcode** untuk konfirmasi selesai
