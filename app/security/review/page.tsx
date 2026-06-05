@@ -13,12 +13,8 @@ import { PhotoZoom } from "@/components/photo-zoom";
 import { ConfirmSubmit } from "@/components/confirm-submit";
 import { AutoRefresh } from "@/components/auto-refresh";
 import { formatDateTime } from "@/lib/format";
-import {
-  reviewOkAction,
-  rejectAction,
-  assignHostAction,
-  updateVisitDepartmentAction,
-} from "../actions";
+import { reviewOkAction, rejectAction } from "../actions";
+import { HostPicker, type Emp } from "./host-picker";
 
 export const dynamic = "force-dynamic";
 
@@ -34,7 +30,7 @@ function Row({ label, value }: { label: string; value: string }) {
 export default async function ReviewPage() {
   await requireRole([ROLES.SECURITY, ROLES.ADMIN]);
 
-  const [visits, hosts, departments] = await Promise.all([
+  const [visits, hosts] = await Promise.all([
     prisma.visit.findMany({
       where: { status: VISIT_STATUS.PENDING_REVIEW },
       orderBy: { createdAt: "asc" },
@@ -49,8 +45,14 @@ export default async function ReviewPage() {
       include: { department: true },
       orderBy: { name: "asc" },
     }),
-    prisma.department.findMany({ orderBy: { name: "asc" } }),
   ]);
+
+  const empOptions: Emp[] = hosts.map((h) => ({
+    id: h.id,
+    name: h.name,
+    nik: h.nik ?? "",
+    department: h.department?.name ?? "",
+  }));
 
   return (
     <div className="space-y-5">
@@ -191,70 +193,23 @@ export default async function ReviewPage() {
                   </dl>
                 </div>
 
-                {/* Koreksi host & department (umum) */}
+                {/* Cocokkan host dari database Karyawan (1 kolom pencarian) */}
                 {!isLoading && (
-                  <div className="mt-4 grid gap-3 rounded-xl bg-slate-50 p-3 sm:grid-cols-2">
-                    <form
-                      action={assignHostAction}
-                      className="flex items-end gap-2"
-                    >
-                      <input type="hidden" name="visitId" value={v.id} />
-                      <div className="flex-1">
-                        <label className="text-xs font-medium text-slate-600">
-                          Host (database karyawan)
-                        </label>
-                        <select
-                          name="hostId"
-                          defaultValue={v.hostId ?? ""}
-                          className="mt-1 w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm outline-none focus:border-slate-500"
-                        >
-                          <option value="">— Belum ditautkan —</option>
-                          {hosts.map((h) => (
-                            <option key={h.id} value={h.id}>
-                              {h.name}
-                              {h.nik ? ` · ${h.nik}` : ""}
-                              {h.department ? ` (${h.department.name})` : ""}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <ConfirmSubmit
-                        message="Simpan koreksi host?"
-                        className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
-                      >
-                        Simpan
-                      </ConfirmSubmit>
-                    </form>
-
-                    <form
-                      action={updateVisitDepartmentAction}
-                      className="flex items-end gap-2"
-                    >
-                      <input type="hidden" name="visitId" value={v.id} />
-                      <div className="flex-1">
-                        <label className="text-xs font-medium text-slate-600">
-                          Department
-                        </label>
-                        <select
-                          name="departmentId"
-                          defaultValue={v.departmentId ?? ""}
-                          className="mt-1 w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm outline-none focus:border-slate-500"
-                        >
-                          <option value="">— Tidak ada —</option>
-                          {departments.map((d) => (
-                            <option key={d.id} value={d.id}>
-                              {d.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <ConfirmSubmit
-                        message="Simpan koreksi department?"
-                        className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
-                      >
-                        Simpan
-                      </ConfirmSubmit>
-                    </form>
+                  <div className="mt-4 rounded-xl bg-slate-50 p-3">
+                    <HostPicker
+                      visitId={v.id}
+                      employees={empOptions}
+                      current={
+                        v.host
+                          ? {
+                              id: v.host.id,
+                              name: v.host.name,
+                              nik: v.host.nik ?? "",
+                              department: v.host.department?.name ?? "",
+                            }
+                          : null
+                      }
+                    />
                   </div>
                 )}
 

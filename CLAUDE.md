@@ -209,6 +209,16 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — Review: kolom pencarian karyawan (combobox)
+- **Permintaan user**: ganti dua dropdown (Host & Department) jadi **1 kolom pencarian** karyawan
+  (ketik/scroll) menampilkan Nama · NIK · Department dari database Karyawan; pilih = host+department valid.
+  Juga: label "Dikunjungi"→"Tamu untuk"; hapus baris "PIC (input tamu)".
+- **`HostPicker`** (`app/security/review/host-picker.tsx`): combobox client — input cari (filter
+  Nama/NIK/Department), daftar scrollable (maks 50), pilih → set hidden hostId → Simpan
+  (`assignHostAction`, dengan konfirmasi). Department otomatis ikut dari host terpilih (panel amber).
+  Department dropdown terpisah dihapus.
+- Build/typecheck lolos; smoke test — kolom pencarian + Simpan tampil. Commit lokal (belum push).
+
 ### 2026-06-05 (lanjutan) — Review: panel PIC+Department berwarna; foto bisa diperbesar
 - Foto identitas & swafoto **bisa diklik untuk diperbesar** (`components/photo-zoom.tsx`, lightbox);
   dipakai di Review & halaman fokus Security.
