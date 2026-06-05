@@ -9,6 +9,8 @@ import {
   VISIT_TYPE,
   VISIT_TYPE_LABEL,
   LOADING_TYPE_LABEL,
+  ID_TYPE_LABEL,
+  VEHICLE_TYPE_LABEL,
 } from "@/lib/constants";
 import { StatusBadge, TypeBadge } from "@/components/status-badge";
 import { formatDateTime } from "@/lib/format";
@@ -19,6 +21,7 @@ import {
   issueCardAction,
   gateCheckInAction,
   checkOutAction,
+  assignHostAction,
 } from "../../actions";
 
 export const dynamic = "force-dynamic";
@@ -40,10 +43,21 @@ export default async function SecurityVisitPage({
   await requireRole([ROLES.SECURITY, ROLES.ADMIN]);
   const { token } = await params;
 
-  const visit = await prisma.visit.findUnique({
-    where: { qrToken: token },
-    include: { visitor: true, host: { include: { department: true } } },
-  });
+  const [visit, hosts] = await Promise.all([
+    prisma.visit.findUnique({
+      where: { qrToken: token },
+      include: {
+        visitor: true,
+        host: { include: { department: true } },
+        department: true,
+      },
+    }),
+    prisma.user.findMany({
+      where: { role: ROLES.HOST },
+      include: { department: true },
+      orderBy: { name: "asc" },
+    }),
+  ]);
   if (!visit) notFound();
 
   const isLoading = visit.visitType === VISIT_TYPE.LOADING;
@@ -91,16 +105,63 @@ export default async function SecurityVisitPage({
                 <Row label="No. Polisi" value={visit.vehiclePlate} />
               )}
               {visit.docNumber && <Row label="Dokumen" value={visit.docNumber} />}
+              <Row label="Konfirmasi ke" value="Warehouse" />
             </>
           ) : (
             <>
               {visit.visitor.company && (
                 <Row label="Perusahaan" value={visit.visitor.company} />
               )}
+              {visit.visitor.jabatan && (
+                <Row label="Jabatan" value={visit.visitor.jabatan} />
+              )}
+              {visit.visitor.email && (
+                <Row label="Email" value={visit.visitor.email} />
+              )}
               <Row label="Keperluan" value={visit.purpose} />
+              {visit.detailPurpose && (
+                <Row label="Detail" value={visit.detailPurpose} />
+              )}
+              <Row label="Department" value={visit.department?.name ?? "-"} />
+              <Row label="PIC (input tamu)" value={visit.hostName ?? "-"} />
+              <Row
+                label="Host terdaftar"
+                value={
+                  visit.host
+                    ? `${visit.host.name}${visit.host.nik ? ` · NIK ${visit.host.nik}` : ""}`
+                    : "(belum dikoreksi)"
+                }
+              />
+              <Row
+                label="Identitas"
+                value={`${ID_TYPE_LABEL[visit.visitor.idType ?? ""] ?? visit.visitor.idType ?? "-"} · ${visit.visitor.idNumber ?? "-"}`}
+              />
+              <Row
+                label="Kendaraan"
+                value={
+                  VEHICLE_TYPE_LABEL[visit.vehicleType ?? ""] ??
+                  visit.vehicleType ??
+                  "-"
+                }
+              />
+              {visit.vehiclePlate && (
+                <Row label="No. Polisi" value={visit.vehiclePlate} />
+              )}
+              {visit.vehicleBrand && (
+                <Row label="Brand/Type" value={visit.vehicleBrand} />
+              )}
+              {visit.driverType && (
+                <Row
+                  label="Pengemudi"
+                  value={
+                    visit.driverType === "DRIVER"
+                      ? `Dengan supir: ${visit.driverName ?? "-"}`
+                      : "Sendiri"
+                  }
+                />
+              )}
             </>
           )}
-          <Row label="Konfirmasi ke" value={confirmTarget} />
           {visit.visitor.phone && (
             <Row label="No. HP" value={visit.visitor.phone} />
           )}
@@ -112,12 +173,86 @@ export default async function SecurityVisitPage({
           )}
           {visit.signedAt && (
             <Row
-              label="TTD Penerima"
-              value={`${visit.signedName ?? "-"} · ${formatDateTime(visit.signedAt)}`}
+              label="Konfirmasi selesai"
+              value={`${visit.signedName ?? "-"}${visit.signedNik ? ` (NIK ${visit.signedNik})` : ""}`}
             />
           )}
         </dl>
       </div>
+
+      {/* Foto identitas & swafoto */}
+      {!isLoading && (visit.visitor.idPhoto || visit.visitor.selfiePhoto) && (
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-3 text-sm font-semibold text-slate-900">Foto</h2>
+          <div className="flex gap-4">
+            {visit.visitor.idPhoto && (
+              <figure className="text-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={visit.visitor.idPhoto}
+                  alt="Foto identitas"
+                  className="h-32 w-32 rounded-lg border border-slate-200 object-cover"
+                />
+                <figcaption className="mt-1 text-xs text-slate-400">
+                  Identitas
+                </figcaption>
+              </figure>
+            )}
+            {visit.visitor.selfiePhoto && (
+              <figure className="text-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={visit.visitor.selfiePhoto}
+                  alt="Swafoto"
+                  className="h-32 w-32 rounded-lg border border-slate-200 object-cover"
+                />
+                <figcaption className="mt-1 text-xs text-slate-400">
+                  Swafoto
+                </figcaption>
+              </figure>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Koreksi Host ke database (privacy: tamu hanya ketik nama) */}
+      {!isLoading &&
+        visit.status !== VISIT_STATUS.CHECKED_OUT &&
+        visit.status !== VISIT_STATUS.REJECTED && (
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="text-sm font-semibold text-slate-900">
+              Koreksi Host (sesuaikan dengan database)
+            </h2>
+            <p className="mt-1 text-xs text-slate-500">
+              Tamu mengetik: <b>{visit.hostName ?? "-"}</b> ·{" "}
+              {visit.department?.name ?? "-"}. Pilih karyawan terdaftar yang sesuai
+              (NIK dipakai untuk validasi konfirmasi selesai).
+            </p>
+            <form action={assignHostAction} className="mt-3 flex gap-2">
+              <input type="hidden" name="visitId" value={visit.id} />
+              <select
+                name="hostId"
+                defaultValue={visit.hostId ?? ""}
+                className="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
+              >
+                <option value="">— Belum ditautkan —</option>
+                {hosts.map((h) => (
+                  <option key={h.id} value={h.id}>
+                    {h.name}
+                    {h.department ? ` (${h.department.name})` : ""}
+                    {h.nik ? ` · ${h.nik}` : ""}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="submit"
+                className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Simpan
+              </button>
+            </form>
+          </div>
+        )}
 
       {/* Aksi sesuai tahap */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">

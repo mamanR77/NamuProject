@@ -17,6 +17,7 @@ model Department {
   id        String   @id @default(cuid())
   name      String   @unique
   users     User[]
+  visits    Visit[]
   createdAt DateTime @default(now())
 }
 
@@ -39,14 +40,19 @@ model User {
 
 /// Data tamu (orang yang berkunjung). Bisa berkunjung berkali-kali.
 model Visitor {
-  id        String   @id @default(cuid())
-  fullName  String
-  company   String?
-  phone     String?
-  idNumber  String? // nomor identitas (KTP/SIM/dll) - opsional
-  photoUrl  String?
-  visits    Visit[]
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  fullName    String
+  company     String?
+  jabatan     String? // jabatan tamu
+  phone       String?
+  email       String?
+  idType      String? // KTP | SIM | PASPOR | KARTU_PEGAWAI
+  idNumber    String? // nomor identitas
+  idPhoto     String? // foto identitas (data URL base64) - wajib di form
+  selfiePhoto String? // foto diri / swafoto (data URL base64)
+  photoUrl    String?
+  visits      Visit[]
+  createdAt   DateTime @default(now())
 }
 
 /// Satu sesi kunjungan. Inti dari lifecycle VMS.
@@ -55,12 +61,21 @@ model Visit {
   id            String         @id @default(cuid())
   visitorId     String
   visitor       Visitor        @relation(fields: [visitorId], references: [id])
-  hostId        String? // opsional: kosong untuk Loading/Unloading
+  hostId        String? // host terdaftar (di-link/koreksi oleh Security saat review)
   host          User?          @relation("VisitHost", fields: [hostId], references: [id])
+  hostName      String? // nama PIC yang diketik tamu (sebelum dikoreksi Security)
+  departmentId  String? // departemen tujuan (dipilih tamu)
+  department    Department?    @relation(fields: [departmentId], references: [id])
   visitType     String         @default("GENERAL") // GENERAL | LOADING
   loadingType   String? // LOADING | UNLOADING (hanya untuk visitType = LOADING)
-  vehiclePlate  String? // nomor polisi kendaraan (loading)
+  vehicleType   String? // CAR | MOTORCYCLE | NONE
+  vehiclePlate  String? // nomor polisi kendaraan
+  vehicleBrand  String? // brand/type kendaraan
+  driverType    String? // SELF | DRIVER (sendiri / dengan supir)
+  driverName    String? // nama supir (jika DRIVER)
   docNumber     String? // No. PO / DO / Surat Jalan (loading)
+  detailPurpose String? // detail keperluan
+  safetyAgreed  Boolean        @default(false) // komitmen safety & compliance
   purpose       String
   status        String         @default("PENDING_REVIEW")
   cardNo        String? // Nomor Kartu Tamu (Visitor Card), diisi Security saat check-in

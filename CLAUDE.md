@@ -209,6 +209,27 @@ Username: `admin` (ADMIN) · `security` (SECURITY) · `andi` (HOST) — **login 
 
 ## 9. Changelog
 
+### 2026-06-05 (lanjutan) — Form Kunjungan Umum 5 section (data lengkap + foto)
+- **Permintaan user**: form dibagi 5 section + banyak field baru. Keputusan: foto disimpan di DB
+  (kompres base64); Host diketik bebas + pilih Department (privasi), **Security koreksi ke
+  database saat review**; **Bahasa Indonesia dulu** (form ID untuk semua bahasa sementara).
+- **Schema**: Visitor + `jabatan,email,idType,idNumber*,idPhoto,selfiePhoto`;
+  Visit + `detailPurpose,hostName,departmentId,vehicleType,vehiclePlate,vehicleBrand,driverType,
+  driverName,safetyAgreed`; relasi `Visit.department`. Migrasi manual `add_general_form_fields`.
+- **Konstanta**: `ID_TYPES`, `VEHICLE_TYPES`, `DRIVER_TYPES`. `next.config` `serverActions.bodySizeLimit=8mb`.
+- **Komponen `PhotoInput`**: ambil kamera/upload → kompres (canvas, ~1000px JPEG) → base64 di hidden input.
+- **Form `/register` (Indonesia, 5 section)**: 1) Informasi Kunjungan (tujuan, detail, host nama,
+  department) 2) Data Diri (nama, perusahaan, jabatan, HP, email) 3) Identitas (jenis, nomor,
+  Foto Identitas wajib, swafoto) 4) Kendaraan (jenis, no.polisi, brand, pengemudi sendiri/supir
+  → nama supir) 5) Safety & Compliance (komitmen + link `/aturan`). Action validasi semua + simpan.
+- **Halaman `/aturan`** (placeholder tata tertib, konten resmi menyusul).
+- **Security focused page**: tampil semua field baru + **foto identitas/swafoto** + **Koreksi Host**
+  (dropdown karyawan terdaftar → set `hostId`, `assignHostAction`). Tamu tak lihat daftar PIC.
+- **/selesai**: validasi NIK ke host yang sudah dikoreksi; jika belum, fallback ke NIK karyawan mana pun terdaftar.
+- ⚠️ Form register kini **Indonesia-only** sementara (dict i18n di-bypass) — EN/JA menyusul setelah disetujui.
+- **Verifikasi**: build/typecheck lolos; smoke test — /register 5 section, /aturan 200, focused
+  security menampilkan field baru + Koreksi Host. Commit lokal (belum push).
+
 ### 2026-06-05 (lanjutan) — UI Security: sidebar + Dashboard papan progres
 - **Permintaan user**: rapikan UI `/security` — **menu sidebar**, halaman pertama = **Dashboard**
   berisi **papan progres** (kolom per tahap, **count di atas** tiap kolom, nama tamu berpindah

@@ -101,5 +101,36 @@ export const NOTIFICATION_STATUS = {
 export type NotificationStatus =
   (typeof NOTIFICATION_STATUS)[keyof typeof NOTIFICATION_STATUS];
 
+// ---- Form Kunjungan Umum ----
+
+export const ID_TYPES = [
+  { value: "KTP", label: "KTP" },
+  { value: "SIM", label: "SIM" },
+  { value: "PASPOR", label: "Paspor" },
+  { value: "KARTU_PEGAWAI", label: "Kartu Pegawai" },
+] as const;
+export const ID_TYPE_VALUES = ID_TYPES.map((t) => t.value) as readonly string[];
+
+export const VEHICLE_TYPES = [
+  { value: "CAR", label: "Mobil" },
+  { value: "MOTORCYCLE", label: "Motor" },
+  { value: "NONE", label: "Tidak Membawa Kendaraan" },
+] as const;
+export const VEHICLE_TYPE_VALUES = VEHICLE_TYPES.map(
+  (t) => t.value
+) as readonly string[];
+export const VEHICLE_TYPE_LABEL: Record<string, string> = Object.fromEntries(
+  VEHICLE_TYPES.map((t) => [t.value, t.label])
+);
+
+export const DRIVER_TYPES = [
+  { value: "SELF", label: "Sendiri" },
+  { value: "DRIVER", label: "Dengan Supir" },
+] as const;
+
+export const ID_TYPE_LABEL: Record<string, string> = Object.fromEntries(
+  ID_TYPES.map((t) => [t.value, t.label])
+);
+
 export const APP_NAME = "Namu";
 export const APP_DESC = "Visitor Management System — PT Glico Manufacturing Indonesia";

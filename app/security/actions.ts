@@ -42,6 +42,20 @@ export async function confirmAcceptAction(formData: FormData) {
   revalidate();
 }
 
+/// Security mengoreksi/menetapkan Host terdaftar (link ke karyawan ber-NIK).
+/// hostId kosong = hapus penautan (kembali ke nama bebas dari tamu).
+export async function assignHostAction(formData: FormData) {
+  await requireRole(ALLOWED);
+  const id = visitId(formData);
+  const hostId = String(formData.get("hostId") ?? "").trim();
+  if (!id) return;
+  await prisma.visit.update({
+    where: { id },
+    data: { host: hostId ? { connect: { id: hostId } } : { disconnect: true } },
+  });
+  revalidate();
+}
+
 /// Tolak kunjungan (saat review atau konfirmasi).
 export async function rejectAction(formData: FormData) {
   await requireRole(ALLOWED);

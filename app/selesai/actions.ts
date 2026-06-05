@@ -75,14 +75,19 @@ export async function submitCompletionAction(
     return { error: "Kunjungan tidak dalam status yang bisa dikonfirmasi." };
   if (visit.signedAt) return { ok: true };
 
-  // Validasi NIK terhadap karyawan yang dituju (primary key = NIK).
-  if (!visit.host?.nik)
-    return {
-      error:
-        "Karyawan yang dituju belum memiliki NIK terdaftar. Hubungi admin.",
-    };
-  if (visit.host.nik !== nik.trim())
-    return { fieldErrors: { nik: "NIK tidak cocok dengan karyawan yang dituju." } };
+  // Validasi NIK (primary key). Jika Security sudah menautkan host, cocokkan ke
+  // NIK host tsb; jika belum, cocokkan ke karyawan mana pun yang terdaftar.
+  const enteredNik = nik.trim();
+  if (visit.host?.nik) {
+    if (visit.host.nik !== enteredNik)
+      return {
+        fieldErrors: { nik: "NIK tidak cocok dengan karyawan yang dituju." },
+      };
+  } else {
+    const emp = await prisma.user.findUnique({ where: { nik: enteredNik } });
+    if (!emp)
+      return { fieldErrors: { nik: "NIK tidak terdaftar di database karyawan." } };
+  }
 
   await prisma.visit.update({
     where: { id: visit.id },
